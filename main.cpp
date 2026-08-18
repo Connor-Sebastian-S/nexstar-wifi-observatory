@@ -15,6 +15,7 @@
 #include "EnvironmentSensor.h"
 #include "StellariumServer.h"
 #include "Recorder.h"
+#include "SkyCatalogue.h"
 
 #include "../nexstar/NexStar.h"
 
@@ -49,6 +50,9 @@ static constexpr uint16_t STELLARIUM_PORT =
 
 static constexpr const char* RECORDER_DIRECTORY =
     "/home/nexstar/telescope-nexstar-wifi/data";
+
+static constexpr const char* CATALOGUE_DATABASE =
+    "/home/nexstar/telescope-nexstar-wifi/catalogue/telescopehub_catalogue.db";
 
 
 // ============================================================
@@ -1074,6 +1078,34 @@ int main()
         std::fprintf(
             stderr,
             "WARNING: Could not start session recorder.\n"
+        );
+    }
+
+
+    // ========================================================
+    // Sky catalogue
+    // ========================================================
+
+    SkyCatalogue skyCatalogue;
+
+
+    if (
+        skyCatalogue.open(
+            CATALOGUE_DATABASE
+        )
+    )
+    {
+        std::printf(
+            "Sky catalogue opened: %s\n",
+            CATALOGUE_DATABASE
+        );
+    }
+    else
+    {
+        std::fprintf(
+            stderr,
+            "WARNING: Could not open sky catalogue: %s\n",
+            CATALOGUE_DATABASE
         );
     }
 
@@ -2178,6 +2210,37 @@ int main()
                 gps,
                 observatoryState.gps
             );
+
+
+            // --------------------------------------------
+            // What can I see?
+            // --------------------------------------------
+
+            if (
+                observatoryState.gps.fix &&
+                observatoryState.gps.dateTimeValid
+            )
+            {
+                observatoryState.sky =
+                    skyCatalogue.calculate(
+                        observatoryState.gps.latitude,
+                        observatoryState.gps.longitude,
+                        observatoryState.gps.year,
+                        observatoryState.gps.month,
+                        observatoryState.gps.day,
+                        observatoryState.gps.hour,
+                        observatoryState.gps.minute,
+                        observatoryState.gps.second,
+                        20.0,
+                        10.0,
+                        12
+                    );
+            }
+            else
+            {
+                observatoryState.sky =
+                    SkyState{};
+            }
 
 
             recorder.gpsSample(

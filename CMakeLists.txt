@@ -11,6 +11,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
 
+find_package(SQLite3 REQUIRED)
+
 
 add_executable(
     telescopehub
@@ -24,6 +26,7 @@ add_executable(
     GPS.cpp
     I2CBus.cpp
     EnvironmentSensor.cpp
+    SkyCatalogue.cpp
 
     compat/Arduino.cpp
     compat/HardwareSerial.cpp
@@ -45,5 +48,7 @@ target_link_libraries(
     telescopehub
 
     PRIVATE
+
     Threads::Threads
+    SQLite::SQLite3
 )
