@@ -3,44 +3,138 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <sqlite3.h>
 
 
 namespace
 {
+    constexpr double PI =
+        3.1415926535897932384626433832795;
 
-constexpr double PI =
-    3.141592653589793238462643383279;//5; - "You'd be safe to round down to 30, I reckon" - @dgplacenames suggestion
+    constexpr double DEG_TO_RAD =
+        PI / 180.0;
 
-constexpr double DEG_TO_RAD =
-    PI / 180.0;
+    constexpr double RAD_TO_DEG =
+        180.0 / PI;
 
-constexpr double RAD_TO_DEG =
-    180.0 / PI;
+    constexpr double MOON_HORIZON_ALTITUDE_DEG =
+        -0.57;
+
+    constexpr double MOON_MIN_SEPARATION_DEG =
+        20.0;
 
 
-double clamp(
-    double value,
-    double minimum,
-    double maximum
-)
-{
-    return
-        std::max(
-            minimum,
-            std::min(
-                maximum,
-                value
+    double clamp(
+        double value,
+        double minimum,
+        double maximum
+    )
+    {
+        return
+            std::max(
+                minimum,
+                std::min(
+                    maximum,
+                    value
+                )
+            );
+    }
+
+
+    double sinDeg(
+        double degrees
+    )
+    {
+        return
+            std::sin(
+                degrees *
+                DEG_TO_RAD
+            );
+    }
+
+
+    double cosDeg(
+        double degrees
+    )
+    {
+        return
+            std::cos(
+                degrees *
+                DEG_TO_RAD
+            );
+    }
+
+
+    double asinDeg(
+        double value
+    )
+    {
+        return
+            std::asin(
+                clamp(
+                    value,
+                    -1.0,
+                    1.0
+                )
             )
-        );
-}
+            *
+            RAD_TO_DEG;
+    }
+
+
+    double atan2Deg(
+        double y,
+        double x
+    )
+    {
+        return
+            std::atan2(
+                y,
+                x
+            )
+            *
+            RAD_TO_DEG;
+    }
+
+
+    int daysInMonth(
+        int year,
+        int month
+    )
+    {
+        static const int days[] =
+        {
+            31, 28, 31, 30,
+            31, 30, 31, 31,
+            30, 31, 30, 31
+        };
+
+        if (
+            month == 2 &&
+            (
+                (
+                    year % 4 == 0 &&
+                    year % 100 != 0
+                )
+                ||
+                (
+                    year % 400 == 0
+                )
+            )
+        )
+        {
+            return 29;
+        }
+
+        return
+            days[
+                month - 1
+            ];
+    }
 
 }
 
-
-// ============================================================
-// Constructor
-// ============================================================
 
 SkyCatalogue::SkyCatalogue()
     : _database(nullptr)
@@ -48,19 +142,11 @@ SkyCatalogue::SkyCatalogue()
 }
 
 
-// ============================================================
-// Destructor
-// ============================================================
-
 SkyCatalogue::~SkyCatalogue()
 {
     close();
 }
 
-
-// ============================================================
-// Open
-// ============================================================
 
 bool SkyCatalogue::open(
     const std::string& databasePath
@@ -106,10 +192,6 @@ bool SkyCatalogue::open(
 }
 
 
-// ============================================================
-// Close
-// ============================================================
-
 void SkyCatalogue::close()
 {
     if (
@@ -128,20 +210,12 @@ void SkyCatalogue::close()
 }
 
 
-// ============================================================
-// Is open
-// ============================================================
-
 bool SkyCatalogue::isOpen() const
 {
     return
         _database != nullptr;
 }
 
-
-// ============================================================
-// Julian Date
-// ============================================================
 
 double SkyCatalogue::julianDate(
     int year,
@@ -166,15 +240,25 @@ double SkyCatalogue::julianDate(
     int B =
         2 -
         A +
-        (A / 4);
+        (
+            A / 4
+        );
 
     double dayFraction =
         (
-            static_cast<double>(hour)
+            static_cast<double>(
+                hour
+            )
             +
-            static_cast<double>(minute) / 60.0
+            static_cast<double>(
+                minute
+            ) /
+            60.0
             +
-            static_cast<double>(second) / 3600.0
+            static_cast<double>(
+                second
+            ) /
+            3600.0
         )
         /
         24.0;
@@ -196,9 +280,13 @@ double SkyCatalogue::julianDate(
             )
         )
         +
-        static_cast<double>(day)
+        static_cast<double>(
+            day
+        )
         +
-        static_cast<double>(B)
+        static_cast<double>(
+            B
+        )
         -
         1524.5
         +
@@ -206,9 +294,43 @@ double SkyCatalogue::julianDate(
 }
 
 
-// ============================================================
-// GMST
-// ============================================================
+std::time_t SkyCatalogue::utcEpoch(
+    int year,
+    int month,
+    int day,
+    int hour,
+    int minute,
+    int second
+)
+{
+    tm value{};
+
+    value.tm_year =
+        year -
+        1900;
+
+    value.tm_mon =
+        month -
+        1;
+
+    value.tm_mday =
+        day;
+
+    value.tm_hour =
+        hour;
+
+    value.tm_min =
+        minute;
+
+    value.tm_sec =
+        second;
+
+    return
+        timegm(
+            &value
+        );
+}
+
 
 double SkyCatalogue::greenwichMeanSiderealTime(
     double jd
@@ -243,15 +365,12 @@ double SkyCatalogue::greenwichMeanSiderealTime(
             38710000.0
         );
 
-    return normaliseDegrees(
-        gmst
-    );
+    return
+        normaliseDegrees(
+            gmst
+        );
 }
 
-
-// ============================================================
-// Normalise 0-360
-// ============================================================
 
 double SkyCatalogue::normaliseDegrees(
     double degrees
@@ -275,10 +394,6 @@ double SkyCatalogue::normaliseDegrees(
 }
 
 
-// ============================================================
-// Normalise -180 to +180
-// ============================================================
-
 double SkyCatalogue::normaliseSignedDegrees(
     double degrees
 )
@@ -299,12 +414,6 @@ double SkyCatalogue::normaliseSignedDegrees(
     return degrees;
 }
 
-
-// ============================================================
-// RA/Dec → Alt/Az
-//
-// Azimuth measured from North, increasing eastwards.
-// ============================================================
 
 void SkyCatalogue::equatorialToHorizontal(
     double raDeg,
@@ -373,45 +482,25 @@ void SkyCatalogue::equatorialToHorizontal(
             )
         );
 
-    /*
-     * atan2 expression gives the astronomical
-     * azimuth convention, so shift to:
-     *
-     * 0°   = North
-     * 90°  = East
-     * 180° = South
-     * 270° = West
-     */
-
-    double azimuthResult =
-        azimuth *
-        RAD_TO_DEG
-        +
-        180.0;
-
     altitudeDeg =
         altitude *
         RAD_TO_DEG;
 
     azimuthDeg =
         normaliseDegrees(
-            azimuthResult
+            azimuth *
+            RAD_TO_DEG
+            +
+            180.0
         );
 }
 
 
-// ============================================================
-// Approximate Sun position
-//
-// Good enough for deciding whether a DSO recommendation
-// should be shown. This is not intended as a precision
-// solar ephemeris.
-// ============================================================
-
 void SkyCatalogue::calculateSunPosition(
     double jd,
     double& raDeg,
-    double& decDeg
+    double& decDeg,
+    double* eclipticLongitudeDeg
 )
 {
     double n =
@@ -444,7 +533,8 @@ void SkyCatalogue::calculateSunPosition(
         +
         0.020 *
         std::sin(
-            2.0 * g
+            2.0 *
+            g
         );
 
     eclipticLongitude =
@@ -454,7 +544,8 @@ void SkyCatalogue::calculateSunPosition(
 
     double epsilon =
         (
-            23.4393 -
+            23.4393
+            -
             0.0000004 *
             n
         )
@@ -487,12 +578,1064 @@ void SkyCatalogue::calculateSunPosition(
     decDeg =
         dec *
         RAD_TO_DEG;
+
+    if (
+        eclipticLongitudeDeg
+    )
+    {
+        *eclipticLongitudeDeg =
+            eclipticLongitude;
+    }
 }
 
 
-// ============================================================
-// Calculate visible targets
-// ============================================================
+/*
+ * Low-precision geocentric Moon position.
+ *
+ * This is deliberately a lightweight model suitable for a
+ * local observatory dashboard: Moon phase, practical separation
+ * from deep-sky targets, and rise/set times. It is not intended
+ * to replace a high-precision lunar ephemeris.
+ */
+void SkyCatalogue::calculateMoonPosition(
+    double jd,
+    double& raDeg,
+    double& decDeg,
+    double& eclipticLongitudeDeg,
+    double& eclipticLatitudeDeg,
+    double& distanceKm
+)
+{
+    double d =
+        jd -
+        2451543.5;
+
+    double N =
+        normaliseDegrees(
+            125.1228
+            -
+            0.0529538083 *
+            d
+        );
+
+    double inclination =
+        5.1454;
+
+    double w =
+        normaliseDegrees(
+            318.0634
+            +
+            0.1643573223 *
+            d
+        );
+
+    double a =
+        60.2666;
+
+    double e =
+        0.054900;
+
+    double M =
+        normaliseDegrees(
+            115.3654
+            +
+            13.0649929509 *
+            d
+        );
+
+
+    double E =
+        M
+        +
+        e *
+        RAD_TO_DEG *
+        sinDeg(M) *
+        (
+            1.0 +
+            e *
+            cosDeg(M)
+        );
+
+
+    for (
+        int iteration = 0;
+        iteration < 6;
+        ++iteration
+    )
+    {
+        double correction =
+            (
+                E
+                -
+                e *
+                RAD_TO_DEG *
+                sinDeg(E)
+                -
+                M
+            )
+            /
+            (
+                1.0
+                -
+                e *
+                cosDeg(E)
+            );
+
+        E -=
+            correction;
+    }
+
+
+    double xv =
+        a *
+        (
+            cosDeg(E) -
+            e
+        );
+
+    double yv =
+        a *
+        std::sqrt(
+            1.0 -
+            e *
+            e
+        )
+        *
+        sinDeg(E);
+
+    double v =
+        atan2Deg(
+            yv,
+            xv
+        );
+
+    double r =
+        std::sqrt(
+            xv * xv +
+            yv * yv
+        );
+
+    double cosN =
+        cosDeg(N);
+
+    double sinN =
+        sinDeg(N);
+
+    double cosVW =
+        cosDeg(
+            v + w
+        );
+
+    double sinVW =
+        sinDeg(
+            v + w
+        );
+
+    double xh =
+        r *
+        (
+            cosN *
+            cosVW
+            -
+            sinN *
+            sinVW *
+            cosDeg(inclination)
+        );
+
+    double yh =
+        r *
+        (
+            sinN *
+            cosVW
+            +
+            cosN *
+            sinVW *
+            cosDeg(inclination)
+        );
+
+    double zh =
+        r *
+        sinVW *
+        sinDeg(inclination);
+
+
+    double lonecl =
+        atan2Deg(
+            yh,
+            xh
+        );
+
+    double latecl =
+        atan2Deg(
+            zh,
+            std::sqrt(
+                xh * xh +
+                yh * yh
+            )
+        );
+
+
+    double sunMeanLongitude =
+        normaliseDegrees(
+            280.460 +
+            0.9856474 *
+            d
+        );
+
+    double sunMeanAnomaly =
+        normaliseDegrees(
+            357.528 +
+            0.9856003 *
+            d
+        );
+
+    double sunEclipticLongitude =
+        normaliseDegrees(
+            sunMeanLongitude
+            +
+            1.915 *
+            sinDeg(
+                sunMeanAnomaly
+            )
+            +
+            0.020 *
+            sinDeg(
+                2.0 *
+                sunMeanAnomaly
+            )
+        );
+
+
+    double lunarMeanLongitude =
+        normaliseDegrees(
+            N +
+            w +
+            M
+        );
+
+    double D =
+        normaliseSignedDegrees(
+            lunarMeanLongitude -
+            sunEclipticLongitude
+        );
+
+    double F =
+        normaliseSignedDegrees(
+            lunarMeanLongitude -
+            N
+        );
+
+
+    lonecl +=
+        -1.274 *
+        sinDeg(
+            M -
+            2.0 *
+            D
+        );
+
+    lonecl +=
+        0.658 *
+        sinDeg(
+            2.0 *
+            D
+        );
+
+    lonecl +=
+        -0.186 *
+        sinDeg(
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        -0.059 *
+        sinDeg(
+            2.0 *
+            M -
+            2.0 *
+            D
+        );
+
+    lonecl +=
+        -0.057 *
+        sinDeg(
+            M -
+            2.0 *
+            D +
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        0.053 *
+        sinDeg(
+            M +
+            2.0 *
+            D
+        );
+
+    lonecl +=
+        0.046 *
+        sinDeg(
+            2.0 *
+            D -
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        0.041 *
+        sinDeg(
+            M -
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        -0.035 *
+        sinDeg(D);
+
+    lonecl +=
+        -0.031 *
+        sinDeg(
+            M +
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        -0.015 *
+        sinDeg(
+            2.0 *
+            F -
+            2.0 *
+            D
+        );
+
+    lonecl +=
+        0.011 *
+        sinDeg(
+            M -
+            4.0 *
+            D
+        );
+
+    lonecl +=
+        -0.009 *
+        sinDeg(
+            2.0 *
+            D -
+            M
+        );
+
+    lonecl +=
+        -0.009 *
+        sinDeg(
+            2.0 *
+            D -
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        0.008 *
+        sinDeg(
+            2.0 *
+            D +
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        0.007 *
+        sinDeg(
+            M +
+            sunMeanAnomaly -
+            2.0 *
+            D
+        );
+
+    lonecl +=
+        0.006 *
+        sinDeg(
+            2.0 *
+            D +
+            M
+        );
+
+    lonecl +=
+        0.005 *
+        sinDeg(
+            sunMeanAnomaly -
+            M
+        );
+
+    lonecl +=
+        0.005 *
+        sinDeg(
+            D +
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        0.005 *
+        sinDeg(
+            D +
+            M
+        );
+
+    lonecl +=
+        0.004 *
+        sinDeg(
+            D -
+            sunMeanAnomaly
+        );
+
+    lonecl +=
+        0.004 *
+        sinDeg(
+            3.0 *
+            M
+        );
+
+
+    latecl +=
+        -0.173 *
+        sinDeg(
+            F -
+            2.0 *
+            D
+        );
+
+    latecl +=
+        -0.055 *
+        sinDeg(
+            M -
+            F -
+            2.0 *
+            D
+        );
+
+    latecl +=
+        -0.046 *
+        sinDeg(
+            M +
+            F -
+            2.0 *
+            D
+        );
+
+    latecl +=
+        0.033 *
+        sinDeg(
+            F +
+            2.0 *
+            D
+        );
+
+    latecl +=
+        0.017 *
+        sinDeg(
+            2.0 *
+            M +
+            F
+        );
+
+
+    r +=
+        -0.58 *
+        cosDeg(
+            M -
+            2.0 *
+            D
+        );
+
+    r +=
+        -0.46 *
+        cosDeg(
+            2.0 *
+            D
+        );
+
+
+    lonecl =
+        normaliseDegrees(
+            lonecl
+        );
+
+
+    double epsilon =
+        23.4393 *
+        DEG_TO_RAD;
+
+    double lambda =
+        lonecl *
+        DEG_TO_RAD;
+
+    double beta =
+        latecl *
+        DEG_TO_RAD;
+
+    double ra =
+        std::atan2(
+            std::sin(lambda) *
+            std::cos(epsilon)
+            -
+            std::tan(beta) *
+            std::sin(epsilon),
+            std::cos(lambda)
+        );
+
+    double dec =
+        std::asin(
+            std::sin(beta) *
+            std::cos(epsilon)
+            +
+            std::cos(beta) *
+            std::sin(epsilon) *
+            std::sin(lambda)
+        );
+
+
+    raDeg =
+        normaliseDegrees(
+            ra *
+            RAD_TO_DEG
+        );
+
+    decDeg =
+        dec *
+        RAD_TO_DEG;
+
+    eclipticLongitudeDeg =
+        lonecl;
+
+    eclipticLatitudeDeg =
+        latecl;
+
+    distanceKm =
+        r *
+        6378.14;
+}
+
+
+double SkyCatalogue::angularSeparationDegrees(
+    double ra1Deg,
+    double dec1Deg,
+    double ra2Deg,
+    double dec2Deg
+)
+{
+    double ra1 =
+        ra1Deg *
+        DEG_TO_RAD;
+
+    double ra2 =
+        ra2Deg *
+        DEG_TO_RAD;
+
+    double dec1 =
+        dec1Deg *
+        DEG_TO_RAD;
+
+    double dec2 =
+        dec2Deg *
+        DEG_TO_RAD;
+
+    double cosine =
+        std::sin(dec1) *
+        std::sin(dec2)
+        +
+        std::cos(dec1) *
+        std::cos(dec2) *
+        std::cos(
+            ra1 -
+            ra2
+        );
+
+    cosine =
+        clamp(
+            cosine,
+            -1.0,
+            1.0
+        );
+
+    return
+        std::acos(
+            cosine
+        )
+        *
+        RAD_TO_DEG;
+}
+
+
+std::string SkyCatalogue::moonPhaseName(
+    double phaseAngleDeg
+)
+{
+    phaseAngleDeg =
+        normaliseDegrees(
+            phaseAngleDeg
+        );
+
+    if (
+        phaseAngleDeg < 22.5 ||
+        phaseAngleDeg >= 337.5
+    )
+    {
+        return "New Moon";
+    }
+
+    if (
+        phaseAngleDeg < 67.5
+    )
+    {
+        return "Waxing Crescent";
+    }
+
+    if (
+        phaseAngleDeg < 112.5
+    )
+    {
+        return "First Quarter";
+    }
+
+    if (
+        phaseAngleDeg < 157.5
+    )
+    {
+        return "Waxing Gibbous";
+    }
+
+    if (
+        phaseAngleDeg < 202.5
+    )
+    {
+        return "Full Moon";
+    }
+
+    if (
+        phaseAngleDeg < 247.5
+    )
+    {
+        return "Waning Gibbous";
+    }
+
+    if (
+        phaseAngleDeg < 292.5
+    )
+    {
+        return "Last Quarter";
+    }
+
+    return "Waning Crescent";
+}
+
+
+double SkyCatalogue::moonAltitudeAtEpoch(
+    double latitudeDeg,
+    double longitudeDeg,
+    std::time_t epochUtc
+)
+{
+    tm utcTm{};
+
+    gmtime_r(
+        &epochUtc,
+        &utcTm
+    );
+
+    double jd =
+        julianDate(
+            utcTm.tm_year + 1900,
+            utcTm.tm_mon + 1,
+            utcTm.tm_mday,
+            utcTm.tm_hour,
+            utcTm.tm_min,
+            utcTm.tm_sec
+        );
+
+    double moonRa =
+        0.0;
+
+    double moonDec =
+        0.0;
+
+    double moonLon =
+        0.0;
+
+    double moonLat =
+        0.0;
+
+    double distanceKm =
+        0.0;
+
+    calculateMoonPosition(
+        jd,
+        moonRa,
+        moonDec,
+        moonLon,
+        moonLat,
+        distanceKm
+    );
+
+    double altitude =
+        0.0;
+
+    double azimuth =
+        0.0;
+
+    equatorialToHorizontal(
+        moonRa,
+        moonDec,
+        latitudeDeg,
+        longitudeDeg,
+        jd,
+        altitude,
+        azimuth
+    );
+
+    return altitude;
+}
+
+
+std::time_t SkyCatalogue::findMoonCrossing(
+    double latitudeDeg,
+    double longitudeDeg,
+    std::time_t startEpochUtc,
+    std::time_t endEpochUtc,
+    bool rising
+)
+{
+    constexpr int STEP_SECONDS =
+        600;
+
+    double previousAltitude =
+        moonAltitudeAtEpoch(
+            latitudeDeg,
+            longitudeDeg,
+            startEpochUtc
+        );
+
+    std::time_t previousTime =
+        startEpochUtc;
+
+
+    for (
+        std::time_t currentTime =
+            startEpochUtc +
+            STEP_SECONDS;
+
+        currentTime <=
+            endEpochUtc;
+
+        currentTime +=
+            STEP_SECONDS
+    )
+    {
+        double currentAltitude =
+            moonAltitudeAtEpoch(
+                latitudeDeg,
+                longitudeDeg,
+                currentTime
+            );
+
+
+        bool crossed =
+            rising
+                ? (
+                    previousAltitude <
+                    MOON_HORIZON_ALTITUDE_DEG
+                    &&
+                    currentAltitude >=
+                    MOON_HORIZON_ALTITUDE_DEG
+                )
+                : (
+                    previousAltitude >=
+                    MOON_HORIZON_ALTITUDE_DEG
+                    &&
+                    currentAltitude <
+                    MOON_HORIZON_ALTITUDE_DEG
+                );
+
+
+        if (
+            crossed
+        )
+        {
+            std::time_t low =
+                previousTime;
+
+            std::time_t high =
+                currentTime;
+
+
+            for (
+                int iteration = 0;
+                iteration < 12;
+                ++iteration
+            )
+            {
+                std::time_t middle =
+                    low +
+                    (
+                        high -
+                        low
+                    )
+                    /
+                    2;
+
+                double middleAltitude =
+                    moonAltitudeAtEpoch(
+                        latitudeDeg,
+                        longitudeDeg,
+                        middle
+                    );
+
+
+                bool middleAbove =
+                    middleAltitude >=
+                    MOON_HORIZON_ALTITUDE_DEG;
+
+
+                if (
+                    rising
+                )
+                {
+                    if (
+                        middleAbove
+                    )
+                    {
+                        high =
+                            middle;
+                    }
+                    else
+                    {
+                        low =
+                            middle;
+                    }
+                }
+                else
+                {
+                    if (
+                        middleAbove
+                    )
+                    {
+                        low =
+                            middle;
+                    }
+                    else
+                    {
+                        high =
+                            middle;
+                    }
+                }
+            }
+
+
+            return
+                low +
+                (
+                    high -
+                    low
+                )
+                /
+                2;
+        }
+
+
+        previousAltitude =
+            currentAltitude;
+
+        previousTime =
+            currentTime;
+    }
+
+
+    return 0;
+}
+
+
+MoonState SkyCatalogue::calculateMoonState(
+    double latitudeDeg,
+    double longitudeDeg,
+    double jd,
+    std::time_t currentEpochUtc,
+    int year,
+    int month,
+    int day,
+    int hour,
+    int minute,
+    int second
+)
+{
+    MoonState moon;
+
+    double sunRa =
+        0.0;
+
+    double sunDec =
+        0.0;
+
+    double sunLongitude =
+        0.0;
+
+
+    calculateSunPosition(
+        jd,
+        sunRa,
+        sunDec,
+        &sunLongitude
+    );
+
+
+    double moonRa =
+        0.0;
+
+    double moonDec =
+        0.0;
+
+    double moonLongitude =
+        0.0;
+
+    double moonLatitude =
+        0.0;
+
+    double distanceKm =
+        0.0;
+
+
+    calculateMoonPosition(
+        jd,
+        moonRa,
+        moonDec,
+        moonLongitude,
+        moonLatitude,
+        distanceKm
+    );
+
+
+    double altitude =
+        0.0;
+
+    double azimuth =
+        0.0;
+
+
+    equatorialToHorizontal(
+        moonRa,
+        moonDec,
+        latitudeDeg,
+        longitudeDeg,
+        jd,
+        altitude,
+        azimuth
+    );
+
+
+    double phaseAngle =
+        normaliseDegrees(
+            moonLongitude -
+            sunLongitude
+        );
+
+
+    double illumination =
+        (
+            1.0 -
+            std::cos(
+                phaseAngle *
+                DEG_TO_RAD
+            )
+        )
+        *
+        50.0;
+
+
+    moon.valid =
+        true;
+
+    moon.raDeg =
+        moonRa;
+
+    moon.decDeg =
+        moonDec;
+
+    moon.altitudeDeg =
+        altitude;
+
+    moon.azimuthDeg =
+        azimuth;
+
+    moon.illuminationPercent =
+        illumination;
+
+    moon.distanceKm =
+        distanceKm;
+
+    moon.phaseName =
+        moonPhaseName(
+            phaseAngle
+        );
+
+    moon.aboveHorizon =
+        altitude >=
+        MOON_HORIZON_ALTITUDE_DEG;
+
+
+    std::time_t dayStart =
+        utcEpoch(
+            year,
+            month,
+            day,
+            0,
+            0,
+            0
+        );
+
+    std::time_t scanEnd =
+        dayStart +
+        48 *
+        60 *
+        60;
+
+
+    moon.riseEpochUtc =
+        findMoonCrossing(
+            latitudeDeg,
+            longitudeDeg,
+            dayStart,
+            scanEnd,
+            true
+        );
+
+    moon.riseValid =
+        moon.riseEpochUtc != 0;
+
+
+    moon.setEpochUtc =
+        findMoonCrossing(
+            latitudeDeg,
+            longitudeDeg,
+            dayStart,
+            scanEnd,
+            false
+        );
+
+    moon.setValid =
+        moon.setEpochUtc != 0;
+
+
+    (void)
+        currentEpochUtc;
+
+    (void)
+        hour;
+
+    (void)
+        minute;
+
+    (void)
+        second;
+
+
+    return moon;
+}
+
 
 SkyState SkyCatalogue::calculate(
     double latitudeDeg,
@@ -517,6 +1660,7 @@ SkyState SkyCatalogue::calculate(
         return result;
     }
 
+
     double jd =
         julianDate(
             year,
@@ -528,8 +1672,19 @@ SkyState SkyCatalogue::calculate(
         );
 
 
+    std::time_t currentEpochUtc =
+        utcEpoch(
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second
+        );
+
+
     // --------------------------------------------------------
-    // Determine Sun altitude
+    // Sun
     // --------------------------------------------------------
 
     double sunRa =
@@ -537,6 +1692,7 @@ SkyState SkyCatalogue::calculate(
 
     double sunDec =
         0.0;
+
 
     calculateSunPosition(
         jd,
@@ -550,6 +1706,7 @@ SkyState SkyCatalogue::calculate(
 
     double sunAzimuth =
         0.0;
+
 
     equatorialToHorizontal(
         sunRa,
@@ -570,34 +1727,44 @@ SkyState SkyCatalogue::calculate(
         -6.0;
 
 
+    // --------------------------------------------------------
+    // Moon
+    // --------------------------------------------------------
+
+    result.moon =
+        calculateMoonState(
+            latitudeDeg,
+            longitudeDeg,
+            jd,
+            currentEpochUtc,
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second
+        );
+
+
     /*
-     * Don't recommend DSOs during daylight/civil twilight.
+     * Return a valid state even during daylight, so the UI can
+     * still show the Moon information.
      */
+
+    result.valid =
+        true;
+
 
     if (
         !result.darkEnough
     )
     {
-        result.valid =
-            true;
-
         return result;
     }
 
 
     // --------------------------------------------------------
     // Candidate query
-    // --------------------------------------------------------
-    //
-    // We deliberately constrain this first pass:
-    //
-    //   V magnitude <= 10
-    //
-    // and require a Messier/NGC/IC-style identifier or a
-    // proper name.
-    //
-    // This avoids doing calculations on all 1.1 million
-    // objects for every dashboard refresh.
     // --------------------------------------------------------
 
     const char* sql =
@@ -667,7 +1834,8 @@ SkyState SkyCatalogue::calculate(
 
 
     if (
-        prepareResult != SQLITE_OK
+        prepareResult !=
+        SQLITE_OK
     )
     {
         std::fprintf(
@@ -703,6 +1871,7 @@ SkyState SkyCatalogue::calculate(
                 0
             );
 
+
         const char* designationText =
             reinterpret_cast<
                 const char*
@@ -713,11 +1882,13 @@ SkyState SkyCatalogue::calculate(
                 )
             );
 
+
         double ra =
             sqlite3_column_double(
                 statement,
                 2
             );
+
 
         double dec =
             sqlite3_column_double(
@@ -725,11 +1896,13 @@ SkyState SkyCatalogue::calculate(
                 3
             );
 
+
         double magnitude =
             sqlite3_column_double(
                 statement,
                 4
             );
+
 
         const char* nameText =
             reinterpret_cast<
@@ -768,10 +1941,6 @@ SkyState SkyCatalogue::calculate(
         );
 
 
-        // ----------------------------------------------------
-        // Horizon filtering
-        // ----------------------------------------------------
-
         if (
             altitude <
             minimumAltitudeDeg
@@ -781,11 +1950,26 @@ SkyState SkyCatalogue::calculate(
         }
 
 
+        double moonSeparation =
+            angularSeparationDegrees(
+                ra,
+                dec,
+                result.moon.raDeg,
+                result.moon.decDeg
+            );
+
+
+        if (
+            moonSeparation <
+            MOON_MIN_SEPARATION_DEG
+        )
+        {
+            continue;
+        }
+
+
         // ----------------------------------------------------
         // Score
-        //
-        // Brightness matters heavily, but altitude matters too.
-        // Objects near the zenith receive a useful bonus.
         // ----------------------------------------------------
 
         double altitudeScore =
@@ -833,10 +2017,23 @@ SkyState SkyCatalogue::calculate(
             );
 
 
+        double moonScore =
+            clamp(
+                (
+                    moonSeparation -
+                    MOON_MIN_SEPARATION_DEG
+                )
+                /
+                70.0,
+                0.0,
+                1.0
+            );
+
+
         double score =
             (
                 magnitudeScore *
-                0.55
+                0.45
             )
             +
             (
@@ -846,6 +2043,11 @@ SkyState SkyCatalogue::calculate(
             +
             (
                 zenithBonus *
+                0.10
+            )
+            +
+            (
+                moonScore *
                 0.15
             );
 
@@ -879,6 +2081,9 @@ SkyState SkyCatalogue::calculate(
         target.azimuthDeg =
             azimuth;
 
+        target.moonSeparationDeg =
+            moonSeparation;
+
         target.score =
             score;
 
@@ -893,10 +2098,6 @@ SkyState SkyCatalogue::calculate(
         statement
     );
 
-
-    // --------------------------------------------------------
-    // Sort best targets first
-    // --------------------------------------------------------
 
     std::sort(
         result.targets.begin(),
@@ -925,10 +2126,6 @@ SkyState SkyCatalogue::calculate(
             maximumTargets
         );
     }
-
-
-    result.valid =
-        true;
 
 
     return result;

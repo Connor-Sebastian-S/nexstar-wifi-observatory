@@ -1393,6 +1393,153 @@ int main()
     );
 
 
+    // ========================================================
+    // Web GOTO callback
+    // ========================================================
+
+    webServer.setGotoHandler(
+        [&](double ra, double dec) -> bool
+        {
+            if (
+                !telescope.isConnected()
+            )
+            {
+                return false;
+            }
+
+
+            if (
+                activeGoto.active ||
+                observatoryState
+                    .telescope
+                    .gotoInProgress
+            )
+            {
+                return false;
+            }
+
+
+            if (
+                ra < 0.0 ||
+                ra >= 360.0 ||
+                dec < -90.0 ||
+                dec > 90.0
+            )
+            {
+                return false;
+            }
+
+
+            if (
+                !telescope.gotoRaDecPrecise(
+                    ra,
+                    dec
+                )
+            )
+            {
+                recorder.journal(
+                    "Web GOTO rejected by NexStar."
+                );
+
+
+                recorder.event(
+                    "goto_rejected",
+                    "source=web"
+                );
+
+
+                return false;
+            }
+
+
+            activeGoto.active =
+                true;
+
+            activeGoto.abortRequested =
+                false;
+
+            activeGoto.sawGotoInProgress =
+                false;
+
+            activeGoto.alignedAtStart =
+                observatoryState
+                    .telescope
+                    .aligned;
+
+            activeGoto.targetRa =
+                ra;
+
+            activeGoto.targetDec =
+                dec;
+
+            activeGoto.startedAt =
+                currentTimeMs();
+
+
+            observatoryState.slew.active =
+                true;
+
+            observatoryState.slew.status =
+                "SLEWING";
+
+            observatoryState.slew.targetRa =
+                ra;
+
+            observatoryState.slew.targetDec =
+                dec;
+
+            observatoryState.slew.remainingDegrees =
+                observatoryState
+                    .telescope
+                    .positionValid
+                    ? angularSeparationDegrees(
+                        observatoryState
+                            .telescope
+                            .ra,
+                        observatoryState
+                            .telescope
+                            .dec,
+                        ra,
+                        dec
+                    )
+                    : 0.0;
+
+            observatoryState.slew.elapsedMs =
+                0;
+
+
+            std::ostringstream message;
+
+            message
+                << "GOTO accepted from web: RA "
+                << ra
+                << " Dec "
+                << dec
+                << " (aligned="
+                << (
+                    activeGoto.alignedAtStart
+                        ? "yes"
+                        : "no"
+                )
+                << ")";
+
+
+            recorder.journal(
+                message.str()
+            );
+
+
+            recorder.event(
+                "goto_start",
+                message.str()
+            );
+
+
+            return true;
+        }
+    );
+
+
     webServer.update(
         observatoryState
     );

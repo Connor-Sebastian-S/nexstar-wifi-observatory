@@ -11,19 +11,24 @@
 #include <unistd.h>
 #include <utility>
 
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+
 
 // ============================================================
 // Constructor
 // ============================================================
 
 WebServer::WebServer()
-    : _serverSocket(-1),
-      _port(0),
-      _state(),
-      _abortGotoHandler(),
-      _environmentHistory()
-{
-}
+        : _serverSocket(-1),
+          _port(0),
+          _state(),
+          _abortGotoHandler(),
+          _gotoHandler(),
+          _environmentHistory()
+    {
+    }
 
 
 // ============================================================
@@ -269,6 +274,19 @@ void WebServer::setAbortGotoHandler(
         );
 }
 
+void WebServer::setGotoHandler(
+    std::function<bool(
+        double,
+        double
+    )> handler
+)
+{
+    _gotoHandler =
+        std::move(
+            handler
+        );
+}
+
 
 // ============================================================
 // Handle requests
@@ -412,6 +430,155 @@ void WebServer::handleClient(
             << body.size()
             << "\r\n"
             << "Access-Control-Allow-Origin: *\r\n"
+            << "Connection: close\r\n"
+            << "\r\n"
+            << body;
+
+
+        std::string response =
+            output.str();
+
+
+        send(
+            clientSocket,
+            response.c_str(),
+            response.size(),
+            0
+        );
+
+
+        close(
+            clientSocket
+        );
+
+
+        return;
+    }
+
+
+    // ========================================================
+    // GOTO endpoint
+    // ========================================================
+
+    if (
+        std::strncmp(
+            request,
+            "POST /api/goto?",
+            15
+        ) == 0
+    )
+    {
+        double ra =
+            0.0;
+
+        double dec =
+            0.0;
+
+
+        auto parseQueryDouble =
+            [&](const char* key, double& value) -> bool
+            {
+                std::string needle =
+                    std::string(key) +
+                    "=";
+
+                const char* start =
+                    std::strstr(
+                        request,
+                        needle.c_str()
+                    );
+
+                if (
+                    !start
+                )
+                {
+                    return false;
+                }
+
+
+                start +=
+                    needle.size();
+
+
+                char* end =
+                    nullptr;
+
+
+                double parsed =
+                    std::strtod(
+                        start,
+                        &end
+                    );
+
+
+                if (
+                    end == start ||
+                    !std::isfinite(parsed)
+                )
+                {
+                    return false;
+                }
+
+
+                value =
+                    parsed;
+
+                return true;
+            };
+
+
+        bool requestValid =
+            parseQueryDouble(
+                "ra",
+                ra
+            )
+            &&
+            parseQueryDouble(
+                "dec",
+                dec
+            );
+
+
+        bool success =
+            false;
+
+
+        if (
+            requestValid &&
+            _gotoHandler
+        )
+        {
+            success =
+                _gotoHandler(
+                    ra,
+                    dec
+                );
+        }
+
+
+        std::string body =
+            success
+                ? "{\"ok\":true}"
+                : "{\"ok\":false}";
+
+
+        std::ostringstream output;
+
+
+        output
+            << "HTTP/1.1 "
+            << (
+                success
+                    ? "200 OK"
+                    : "409 Conflict"
+            )
+            << "\r\n"
+            << "Content-Type: application/json\r\n"
+            << "Content-Length: "
+            << body.size()
+            << "\r\n"
+            << "Access-Control-Allow-Origin: *\r\n"
+            << "Cache-Control: no-cache, no-store, must-revalidate\r\n"
             << "Connection: close\r\n"
             << "\r\n"
             << body;
@@ -772,6 +939,14 @@ std::string WebServer::buildHtml() const
         << "}"
 
 
+        << ".goto-button{"
+        << "padding:6px 10px;"
+        << "font-size:13px;"
+        << "font-weight:bold;"
+        << "cursor:pointer;"
+        << "}"
+
+
         << "table{"
         << "width:100%;"
         << "border-collapse:collapse;"
@@ -1038,6 +1213,28 @@ std::string WebServer::buildHtml() const
 
     html
         << "<script>"
+        << "function gotoTarget(ra,dec,button){"
+        << "if(!confirm('GOTO this target?'))return;"
+        << "button.disabled=true;"
+        << "button.textContent='GOTO...';"
+        << "fetch('/api/goto?ra='+encodeURIComponent(ra)"
+           "+'&dec='+encodeURIComponent(dec),"
+           "{method:'POST'})"
+        << ".then(r=>r.json())"
+        << ".then(d=>{"
+        << "if(d.ok){location.reload();}"
+        << "else{"
+        << "button.disabled=false;"
+        << "button.textContent='GOTO';"
+        << "alert('GOTO was rejected. Check the telescope connection or whether a slew is already active.');"
+        << "}"
+        << "})"
+        << ".catch(()=>{"
+        << "button.disabled=false;"
+        << "button.textContent='GOTO';"
+        << "alert('Could not contact TelescopeHub.');"
+        << "});"
+        << "}"
         << "function abortGoto(){"
         << "fetch('/api/abort',{method:'POST'})"
         << ".then(r=>r.json())"
@@ -1363,154 +1560,290 @@ std::string WebServer::buildHtml() const
         << "</div>";
 
     // ========================================================
-// What can I see?
-// ========================================================
-
-html
-    << "<div class=\"card\">"
-    << "<h2>What Can I See?</h2>";
-
-if (
-    !_state.sky.valid
-)
-{
-    html
-        << "<div class=\"row\">"
-        << "Sky information unavailable."
-        << "</div>";
-}
-else if (
-    !_state.gps.fix
-)
-{
-    html
-        << "<div class=\"row\">"
-        << "Waiting for GPS fix."
-        << "</div>";
-}
-else if (
-    !_state.sky.darkEnough
-)
-{
-    html
-        << "<div class=\"row\">"
-        << "<span class=\"label\">Sun altitude</span>"
-        << "<span class=\"value\">"
-        << std::fixed
-        << std::setprecision(1)
-        << _state.sky.sunAltitudeDeg
-        << "&deg;"
-        << "</span>"
-        << "</div>";
+    // What's up tonight?
+    // ========================================================
 
     html
-        << "<div class=\"row\">"
-        << "The sky is currently too bright for "
-           "the deep-sky recommendation engine."
-        << "</div>";
-}
-else if (
-    _state.sky.targets.empty()
-)
-{
-    html
-        << "<div class=\"row\">"
-        << "No suitable targets found above the "
-           "minimum altitude."
-        << "</div>";
-}
-else
-{
-    html
-        << "<div class=\"row\">"
-        << "<span class=\"label\">Sun altitude</span>"
-        << "<span class=\"value\">"
-        << std::fixed
-        << std::setprecision(1)
-        << _state.sky.sunAltitudeDeg
-        << "&deg;"
-        << "</span>"
-        << "</div>";
+        << "<div class=\"card\">"
+        << "<h2>What's Up Tonight?</h2>";
 
-    html
-        << "<table>"
-        << "<tr>"
-        << "<th>Target</th>"
-        << "<th>Alt</th>"
-        << "<th>Az</th>"
-        << "<th>Mag</th>"
-        << "</tr>";
 
-    for (
-        const SkyTarget& target :
-        _state.sky.targets
+    if (
+        !_state.sky.valid
     )
     {
         html
-            << "<tr>";
-
+            << "<div class=\"row\">"
+            << "Sky information unavailable."
+            << "</div>";
+    }
+    else if (
+        !_state.gps.fix ||
+        !_state.gps.dateTimeValid
+    )
+    {
         html
-            << "<td>";
+            << "<div class=\"row\">"
+            << "Waiting for valid GPS position and time."
+            << "</div>";
+    }
+    else
+    {
+        html
+            << "<div class=\"row\">"
+            << "<span class=\"label\">Sun altitude</span>"
+            << "<span class=\"value\">"
+            << std::fixed
+            << std::setprecision(1)
+            << _state.sky.sunAltitudeDeg
+            << "&deg;"
+            << "</span>"
+            << "</div>";
+
 
         if (
-            !target.name.empty()
+            _state.sky.moon.valid
         )
         {
             html
-                << "<strong>"
+                << "<h3>Moon</h3>";
+
+
+            html
+                << "<div class=\"row\">"
+                << "<span class=\"label\">Phase</span>"
+                << "<span class=\"value\">"
                 << htmlEscape(
-                    target.name
+                    _state.sky.moon.phaseName
                 )
-                << "</strong>"
-                << "<br>"
-                << "<small>"
-                << htmlEscape(
-                    target.designation
-                )
-                << "</small>";
+                << " ("
+                << std::fixed
+                << std::setprecision(0)
+                << _state.sky.moon.illuminationPercent
+                << "%)"
+                << "</span>"
+                << "</div>";
+
+
+            html
+                << "<div class=\"row\">"
+                << "<span class=\"label\">Position</span>"
+                << "<span class=\"value\">"
+                << std::fixed
+                << std::setprecision(1)
+                << _state.sky.moon.altitudeDeg
+                << "&deg; alt / "
+                << _state.sky.moon.azimuthDeg
+                << "&deg; az"
+                << "</span>"
+                << "</div>";
+
+
+            html
+                << "<div class=\"row\">"
+                << "<span class=\"label\">Moon rise</span>"
+                << "<span class=\"value\">";
+
+
+            if (
+                _state.sky.moon.riseValid
+            )
+            {
+                std::time_t rise =
+                    _state.sky.moon.riseEpochUtc;
+
+                std::tm localTime{};
+
+                localtime_r(
+                    &rise,
+                    &localTime
+                );
+
+                char text[32] =
+                    {};
+
+                std::strftime(
+                    text,
+                    sizeof(text),
+                    "%H:%M",
+                    &localTime
+                );
+
+                html
+                    << text;
+            }
+            else
+            {
+                html
+                    << "—";
+            }
+
+
+            html
+                << "</span>"
+                << "</div>";
+
+
+            html
+                << "<div class=\"row\">"
+                << "<span class=\"label\">Moon set</span>"
+                << "<span class=\"value\">";
+
+
+            if (
+                _state.sky.moon.setValid
+            )
+            {
+                std::time_t set =
+                    _state.sky.moon.setEpochUtc;
+
+                std::tm localTime{};
+
+                localtime_r(
+                    &set,
+                    &localTime
+                );
+
+                char text[32] =
+                    {};
+
+                std::strftime(
+                    text,
+                    sizeof(text),
+                    "%H:%M",
+                    &localTime
+                );
+
+                html
+                    << text;
+            }
+            else
+            {
+                html
+                    << "—";
+            }
+
+
+            html
+                << "</span>"
+                << "</div>";
+        }
+
+
+        if (
+            !_state.sky.darkEnough
+        )
+        {
+            html
+                << "<div class=\"row\">"
+                << "The sky is currently too bright for "
+                   "deep-sky recommendations."
+                << "</div>";
+        }
+        else if (
+            _state.sky.targets.empty()
+        )
+        {
+            html
+                << "<div class=\"row\">"
+                << "No suitable targets found."
+                << "</div>";
         }
         else
         {
             html
-                << "<strong>"
-                << htmlEscape(
-                    target.designation
+                << "<h3>Recommended targets</h3>"
+                << "<table>"
+                << "<tr>"
+                << "<th>Target</th>"
+                << "<th>Alt</th>"
+                << "<th>Az</th>"
+                << "<th>Mag</th>"
+                << "<th>Moon</th>"
+                << "<th></th>"
+                << "</tr>";
+
+
+            for (
+                const SkyTarget& target :
+                _state.sky.targets
+            )
+            {
+                html
+                    << "<tr>"
+                    << "<td>";
+
+
+                if (
+                    !target.name.empty()
                 )
-                << "</strong>";
+                {
+                    html
+                        << "<strong>"
+                        << htmlEscape(
+                            target.name
+                        )
+                        << "</strong>"
+                        << "<br>"
+                        << "<small>"
+                        << htmlEscape(
+                            target.designation
+                        )
+                        << "</small>";
+                }
+                else
+                {
+                    html
+                        << "<strong>"
+                        << htmlEscape(
+                            target.designation
+                        )
+                        << "</strong>";
+                }
+
+
+                html
+                    << "</td>"
+                    << "<td>"
+                    << std::fixed
+                    << std::setprecision(1)
+                    << target.altitudeDeg
+                    << "&deg;"
+                    << "</td>"
+                    << "<td>"
+                    << target.azimuthDeg
+                    << "&deg;"
+                    << "</td>"
+                    << "<td>"
+                    << target.magnitude
+                    << "</td>"
+                    << "<td>"
+                    << target.moonSeparationDeg
+                    << "&deg;"
+                    << "</td>"
+                    << "<td>"
+                    << "<button "
+                       "class=\"goto-button\" "
+                       "onclick=\"gotoTarget("
+                    << target.raDeg
+                    << ","
+                    << target.decDeg
+                    << ",this)\">"
+                    << "GOTO"
+                    << "</button>"
+                    << "</td>"
+                    << "</tr>";
+            }
+
+
+            html
+                << "</table>";
         }
-
-        html
-            << "</td>";
-
-        html
-            << "<td>"
-            << std::fixed
-            << std::setprecision(1)
-            << target.altitudeDeg
-            << "&deg;"
-            << "</td>";
-
-        html
-            << "<td>"
-            << target.azimuthDeg
-            << "&deg;"
-            << "</td>";
-
-        html
-            << "<td>"
-            << target.magnitude
-            << "</td>";
-
-        html
-            << "</tr>";
     }
 
-    html
-        << "</table>";
-}
 
-html
-    << "</div>";
+    html
+        << "</div>";
 
 
     // ========================================================

@@ -307,6 +307,14 @@ public:
     );
 
 
+    void setGotoHandler(
+        std::function<bool(
+            double,
+            double
+        )> handler
+    );
+
+
 private:
 
     int _serverSocket;
@@ -318,6 +326,11 @@ private:
     std::function<bool()>
         _abortGotoHandler;
 
+    std::function<bool(
+        double,
+        double
+    )>
+        _gotoHandler;
 
     std::vector<EnvironmentHistorySample>
         _environmentHistory;

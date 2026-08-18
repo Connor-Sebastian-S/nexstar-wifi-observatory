@@ -1,8 +1,52 @@
 #pragma once
 
 #include <cstdint>
+#include <ctime>
 #include <string>
 #include <vector>
+
+
+struct MoonState
+{
+    bool valid =
+        false;
+
+    double raDeg =
+        0.0;
+
+    double decDeg =
+        0.0;
+
+    double altitudeDeg =
+        0.0;
+
+    double azimuthDeg =
+        0.0;
+
+    double illuminationPercent =
+        0.0;
+
+    double distanceKm =
+        0.0;
+
+    std::string phaseName =
+        "Unknown";
+
+    bool aboveHorizon =
+        false;
+
+    bool riseValid =
+        false;
+
+    bool setValid =
+        false;
+
+    std::time_t riseEpochUtc =
+        0;
+
+    std::time_t setEpochUtc =
+        0;
+};
 
 
 struct SkyTarget
@@ -29,6 +73,9 @@ struct SkyTarget
     double azimuthDeg =
         0.0;
 
+    double moonSeparationDeg =
+        180.0;
+
     double score =
         0.0;
 };
@@ -44,6 +91,8 @@ struct SkyState
 
     double sunAltitudeDeg =
         0.0;
+
+    MoonState moon;
 
     std::vector<SkyTarget>
         targets;
@@ -100,6 +149,16 @@ private:
     );
 
 
+    static std::time_t utcEpoch(
+        int year,
+        int month,
+        int day,
+        int hour,
+        int minute,
+        int second
+    );
+
+
     static double greenwichMeanSiderealTime(
         double jd
     );
@@ -119,7 +178,61 @@ private:
     static void calculateSunPosition(
         double jd,
         double& raDeg,
-        double& decDeg
+        double& decDeg,
+        double* eclipticLongitudeDeg = nullptr
+    );
+
+
+    static void calculateMoonPosition(
+        double jd,
+        double& raDeg,
+        double& decDeg,
+        double& eclipticLongitudeDeg,
+        double& eclipticLatitudeDeg,
+        double& distanceKm
+    );
+
+
+    static MoonState calculateMoonState(
+        double latitudeDeg,
+        double longitudeDeg,
+        double jd,
+        std::time_t currentEpochUtc,
+        int year,
+        int month,
+        int day,
+        int hour,
+        int minute,
+        int second
+    );
+
+
+    static double angularSeparationDegrees(
+        double ra1Deg,
+        double dec1Deg,
+        double ra2Deg,
+        double dec2Deg
+    );
+
+
+    static std::time_t findMoonCrossing(
+        double latitudeDeg,
+        double longitudeDeg,
+        std::time_t startEpochUtc,
+        std::time_t endEpochUtc,
+        bool rising
+    );
+
+
+    static double moonAltitudeAtEpoch(
+        double latitudeDeg,
+        double longitudeDeg,
+        std::time_t epochUtc
+    );
+
+
+    static std::string moonPhaseName(
+        double phaseAngleDeg
     );
 
 
