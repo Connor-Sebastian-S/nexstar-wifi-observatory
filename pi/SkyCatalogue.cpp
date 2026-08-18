@@ -10,7 +10,7 @@ namespace
 {
 
 constexpr double PI =
-    3.1415926535897932384626433832795;
+    3.141592653589793238462643383279;//5; - "You'd be safe to round down to 30, I reckon" - @dgplacenames suggestion
 
 constexpr double DEG_TO_RAD =
     PI / 180.0;
