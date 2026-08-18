@@ -1734,10 +1734,142 @@ std::string WebServer::buildHtml() const
             !_state.sky.darkEnough
         )
         {
+            std::vector<std::string> upcomingDso;
+
+            std::vector<std::string> visiblePlanets;
+
+
+            for (
+                const SkyTarget& target :
+                _state.sky.targets
+            )
+            {
+                if (
+                    target.isPlanet
+                )
+                {
+                    visiblePlanets.push_back(
+                        target.name
+                    );
+                }
+                else if (
+                    upcomingDso.size() < 3
+                )
+                {
+                    upcomingDso.push_back(
+                        !target.name.empty()
+                            ? target.name
+                            : target.designation
+                    );
+                }
+            }
+
+
+            auto joinNames =
+                [](
+                    const std::vector<std::string>& names
+                ) -> std::string
+                {
+                    std::string joined;
+
+                    for (
+                        std::size_t i = 0;
+                        i < names.size();
+                        ++i
+                    )
+                    {
+                        if (
+                            i > 0 &&
+                            i == names.size() - 1
+                        )
+                        {
+                            joined +=
+                                names.size() > 2
+                                    ? ", and "
+                                    : " and ";
+                        }
+                        else if (
+                            i > 0
+                        )
+                        {
+                            joined +=
+                                ", ";
+                        }
+
+                        joined +=
+                            names[i];
+                    }
+
+                    return joined;
+                };
+
+
             html
-                << "<div class=\"row\">"
-                << "The sky is currently too bright for "
-                   "deep-sky recommendations."
+                << "<div class=\"row\">";
+
+
+            if (
+                !upcomingDso.empty()
+            )
+            {
+                html
+                    << "The sky's too bright for deep-sky "
+                       "viewing right now &mdash; once it's "
+                       "dark, you'll be able to see <strong>"
+                    << htmlEscape(
+                        joinNames(
+                            upcomingDso
+                        )
+                    )
+                    << "</strong>.";
+            }
+            else
+            {
+                html
+                    << "The sky's too bright for deep-sky "
+                       "viewing right now.";
+            }
+
+
+            if (
+                !visiblePlanets.empty()
+            )
+            {
+                html
+                    << " Right now you can also spot <strong>"
+                    << htmlEscape(
+                        joinNames(
+                            visiblePlanets
+                        )
+                    )
+                    << "</strong>.";
+            }
+            else{
+                html
+                    << " Right now there's no planets visible"
+                    << htmlEscape(
+                        joinNames(
+                            visiblePlanets
+                        )
+                    )
+                    << "</strong>.";
+            }
+
+
+            if (
+                _state.sky.moon.aboveHorizon
+            )
+            {
+                html
+                    << " The Moon ("
+                    << htmlEscape(
+                        _state.sky.moon.phaseName
+                    )
+                    << ") is up too.";
+            }
+
+
+            html
                 << "</div>";
         }
         else if (

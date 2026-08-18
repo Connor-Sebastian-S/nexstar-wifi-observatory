@@ -78,6 +78,14 @@ struct SkyTarget
 
     double score =
         0.0;
+
+    /*
+     * True for Sun-orbiting bodies (planets) computed
+     * analytically, as opposed to fixed deep-sky objects
+     * pulled from the catalogue database.
+     */
+    bool isPlanet =
+        false;
 };
 
 
@@ -191,6 +199,51 @@ private:
         double& eclipticLatitudeDeg,
         double& distanceKm
     );
+
+
+    /*
+     * Heliocentric distance (AU) and geocentric ecliptic
+     * longitude (deg) of the Sun, solved via Kepler's equation.
+     *
+     * This is a separate, slightly higher-precision helper than
+     * calculateSunPosition(): planet positions need the Sun's
+     * true distance and longitude to convert heliocentric
+     * planet coordinates into geocentric ones.
+     */
+    static void sunHeliocentric(
+        double jd,
+        double& distanceAu,
+        double& longitudeDeg
+    );
+
+
+    /*
+     * Low-precision geocentric planet position, following the
+     * same Keplerian-element approach as calculateMoonPosition().
+     * planetIndex selects into the internal PLANETS table
+     * (0 = Mercury ... 5 = Neptune, see SkyCatalogue.cpp).
+     */
+    static bool calculatePlanetPosition(
+        int planetIndex,
+        double jd,
+        double& raDeg,
+        double& decDeg,
+        double& distanceAu,
+        double& phaseAngleDeg,
+        double& sunDistanceAu,
+        std::string& name
+    );
+
+
+    static double planetMagnitude(
+        const std::string& name,
+        double sunDistanceAu,
+        double earthDistanceAu,
+        double phaseAngleDeg
+    );
+
+
+    static int planetCount();
 
 
     static MoonState calculateMoonState(

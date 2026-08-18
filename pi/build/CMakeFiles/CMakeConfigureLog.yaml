@@ -61,8 +61,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5"
-      binary: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5"
+      source: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c"
+      binary: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -71,13 +71,13 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5'
+        Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_0b5d0/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_0b5d0.dir/build.make CMakeFiles/cmTC_0b5d0.dir/build
-        gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5'
-        Building C object CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o
-        /usr/bin/cc   -v -o CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_1a25b/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_1a25b.dir/build.make CMakeFiles/cmTC_1a25b.dir/build
+        gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c'
+        Building C object CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -v -o CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         Target: arm-linux-gnueabihf
@@ -85,8 +85,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_0b5d0.dir/'
-         /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1 -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_0b5d0.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/cceD8Ccb.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_1a25b.dir/'
+         /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1 -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_1a25b.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/ccvHe4ca.s
         GNU C17 (Raspbian 14.2.0-19+rpi1) version 14.2.0 (arm-linux-gnueabihf)
         	compiled by GNU C version 14.2.0, GMP version 6.3.0, MPFR version 4.2.1, MPC version 1.3.1, isl version isl-0.27-GMP
         
@@ -104,14 +104,14 @@ events:
          /usr/include
         End of search list.
         Compiler executable checksum: 04388919d42652114d16308b030ced8f
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_0b5d0.dir/'
-         as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o /tmp/cceD8Ccb.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_1a25b.dir/'
+         as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o /tmp/ccvHe4ca.s
         GNU assembler version 2.44 (arm-linux-gnueabihf) using BFD version (GNU Binutils for Raspbian) 2.44
         COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/
         LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.'
-        Linking C executable cmTC_0b5d0
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0b5d0.dir/link.txt --verbose=1
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_1a25b
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1a25b.dir/link.txt --verbose=1
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         COLLECT_LTO_WRAPPER=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper
@@ -122,14 +122,14 @@ events:
         gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) 
         COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/
         LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_0b5d0'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_0b5d0.'
-         /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc47ApLe.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_0b5d0 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1a25b'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_1a25b.'
+         /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccytLzIj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_1a25b /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
         collect2 version 14.2.0
-        /usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc47ApLe.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_0b5d0 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
+        /usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccytLzIj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_1a25b /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
         GNU ld (GNU Binutils for Raspbian) 2.44
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_0b5d0'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_0b5d0.'
-        /usr/bin/cc  -v -Wl,-v CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -o cmTC_0b5d0
-        gmake[1]: Leaving directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1a25b'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_1a25b.'
+        /usr/bin/cc  -v -Wl,-v CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -o cmTC_1a25b
+        gmake[1]: Leaving directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c'
         
       exitCode: 0
   -
@@ -164,13 +164,13 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
-        ignore line: [Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5']
+        ignore line: [Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_0b5d0/fast]
-        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_0b5d0.dir/build.make CMakeFiles/cmTC_0b5d0.dir/build]
-        ignore line: [gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-26pnX5']
-        ignore line: [Building C object CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o]
-        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_1a25b/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_1a25b.dir/build.make CMakeFiles/cmTC_1a25b.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-8Aae7c']
+        ignore line: [Building C object CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [Target: arm-linux-gnueabihf]
@@ -178,8 +178,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_0b5d0.dir/']
-        ignore line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1 -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_0b5d0.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/cceD8Ccb.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_1a25b.dir/']
+        ignore line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1 -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf /usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_1a25b.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/ccvHe4ca.s]
         ignore line: [GNU C17 (Raspbian 14.2.0-19+rpi1) version 14.2.0 (arm-linux-gnueabihf)]
         ignore line: [	compiled by GNU C version 14.2.0  GMP version 6.3.0  MPFR version 4.2.1  MPC version 1.3.1  isl version isl-0.27-GMP]
         ignore line: []
@@ -197,14 +197,14 @@ events:
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: 04388919d42652114d16308b030ced8f]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_0b5d0.dir/']
-        ignore line: [ as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o /tmp/cceD8Ccb.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_1a25b.dir/']
+        ignore line: [ as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o /tmp/ccvHe4ca.s]
         ignore line: [GNU assembler version 2.44 (arm-linux-gnueabihf) using BFD version (GNU Binutils for Raspbian) 2.44]
         ignore line: [COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.']
-        ignore line: [Linking C executable cmTC_0b5d0]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0b5d0.dir/link.txt --verbose=1]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o' '-c'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_1a25b]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1a25b.dir/link.txt --verbose=1]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper]
@@ -215,13 +215,13 @@ events:
         ignore line: [gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) ]
         ignore line: [COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_0b5d0'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_0b5d0.']
-        link line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc47ApLe.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_0b5d0 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1a25b'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_1a25b.']
+        link line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccytLzIj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_1a25b /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
           arg [/usr/libexec/gcc/arm-linux-gnueabihf/14/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/cc47ApLe.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccytLzIj.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -237,7 +237,7 @@ events:
           arg [-m] ==> ignore
           arg [armelf_linux_eabi] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_0b5d0] ==> ignore
+          arg [cmTC_1a25b] ==> ignore
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o]
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o]
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o]
@@ -247,7 +247,7 @@ events:
           arg [-L/lib/arm-linux-gnueabihf] ==> dir [/lib/arm-linux-gnueabihf]
           arg [-L/usr/lib/arm-linux-gnueabihf] ==> dir [/usr/lib/arm-linux-gnueabihf]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o] ==> ignore
           arg [-lgcc] ==> lib [gcc]
           arg [--push-state] ==> ignore
           arg [--as-needed] ==> ignore
@@ -262,7 +262,7 @@ events:
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o]
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
         ignore line: [collect2 version 14.2.0]
-        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc47ApLe.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_0b5d0 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_0b5d0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
+        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccytLzIj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_1a25b /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_1a25b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
         linker tool for 'C': /usr/bin/ld
         collapse obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o] ==> [/usr/lib/arm-linux-gnueabihf/crt1.o]
         collapse obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o] ==> [/usr/lib/arm-linux-gnueabihf/crti.o]
@@ -297,8 +297,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL"
-      binary: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL"
+      source: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf"
+      binary: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -308,13 +308,13 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL'
+        Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_3c5c4/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_3c5c4.dir/build.make CMakeFiles/cmTC_3c5c4.dir/build
-        gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL'
-        Building CXX object CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o
-        /usr/bin/c++   -v -o CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_06b89/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_06b89.dir/build.make CMakeFiles/cmTC_06b89.dir/build
+        gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf'
+        Building CXX object CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -v -o CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp
         Using built-in specs.
         COLLECT_GCC=/usr/bin/c++
         Target: arm-linux-gnueabihf
@@ -322,8 +322,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_3c5c4.dir/'
-         /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1plus -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf -D_GNU_SOURCE /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_3c5c4.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/ccF0KpwR.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_06b89.dir/'
+         /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1plus -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf -D_GNU_SOURCE /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_06b89.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/ccNaS8Wb.s
         GNU C++17 (Raspbian 14.2.0-19+rpi1) version 14.2.0 (arm-linux-gnueabihf)
         	compiled by GNU C version 14.2.0, GMP version 6.3.0, MPFR version 4.2.1, MPC version 1.3.1, isl version isl-0.27-GMP
         
@@ -345,14 +345,14 @@ events:
          /usr/include
         End of search list.
         Compiler executable checksum: 19db90af162acfb43d3b3c995d98d404
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_3c5c4.dir/'
-         as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccF0KpwR.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_06b89.dir/'
+         as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccNaS8Wb.s
         GNU assembler version 2.44 (arm-linux-gnueabihf) using BFD version (GNU Binutils for Raspbian) 2.44
         COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/
         LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.'
-        Linking CXX executable cmTC_3c5c4
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3c5c4.dir/link.txt --verbose=1
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_06b89
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06b89.dir/link.txt --verbose=1
         Using built-in specs.
         COLLECT_GCC=/usr/bin/c++
         COLLECT_LTO_WRAPPER=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper
@@ -363,14 +363,14 @@ events:
         gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) 
         COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/
         LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3c5c4' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_3c5c4.'
-         /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cct4PpRt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_3c5c4 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_06b89' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_06b89.'
+         /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCHJTP0.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_06b89 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
         collect2 version 14.2.0
-        /usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cct4PpRt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_3c5c4 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
+        /usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCHJTP0.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_06b89 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o
         GNU ld (GNU Binutils for Raspbian) 2.44
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3c5c4' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_3c5c4.'
-        /usr/bin/c++  -v -Wl,-v CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_3c5c4
-        gmake[1]: Leaving directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_06b89' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_06b89.'
+        /usr/bin/c++  -v -Wl,-v CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_06b89
+        gmake[1]: Leaving directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf'
         
       exitCode: 0
   -
@@ -411,13 +411,13 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
-        ignore line: [Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL']
+        ignore line: [Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_3c5c4/fast]
-        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_3c5c4.dir/build.make CMakeFiles/cmTC_3c5c4.dir/build]
-        ignore line: [gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-pZ6XRL']
-        ignore line: [Building CXX object CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_06b89/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_06b89.dir/build.make CMakeFiles/cmTC_06b89.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-W48Haf']
+        ignore line: [Building CXX object CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/c++]
         ignore line: [Target: arm-linux-gnueabihf]
@@ -425,8 +425,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_3c5c4.dir/']
-        ignore line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1plus -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf -D_GNU_SOURCE /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_3c5c4.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/ccF0KpwR.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_06b89.dir/']
+        ignore line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/cc1plus -quiet -v -imultilib . -imultiarch arm-linux-gnueabihf -D_GNU_SOURCE /usr/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64 -quiet -dumpdir CMakeFiles/cmTC_06b89.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mfloat-abi=hard -mtls-dialect=gnu -marm -mlibarch=armv6+fp -march=armv6+fp -version -o /tmp/ccNaS8Wb.s]
         ignore line: [GNU C++17 (Raspbian 14.2.0-19+rpi1) version 14.2.0 (arm-linux-gnueabihf)]
         ignore line: [	compiled by GNU C version 14.2.0  GMP version 6.3.0  MPFR version 4.2.1  MPC version 1.3.1  isl version isl-0.27-GMP]
         ignore line: []
@@ -448,14 +448,14 @@ events:
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: 19db90af162acfb43d3b3c995d98d404]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_3c5c4.dir/']
-        ignore line: [ as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccF0KpwR.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_06b89.dir/']
+        ignore line: [ as -v -march=armv6+fp -mfloat-abi=hard -meabi=5 -o CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccNaS8Wb.s]
         ignore line: [GNU assembler version 2.44 (arm-linux-gnueabihf) using BFD version (GNU Binutils for Raspbian) 2.44]
         ignore line: [COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.']
-        ignore line: [Linking CXX executable cmTC_3c5c4]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3c5c4.dir/link.txt --verbose=1]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_06b89]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06b89.dir/link.txt --verbose=1]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/c++]
         ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper]
@@ -466,13 +466,13 @@ events:
         ignore line: [gcc version 14.2.0 (Raspbian 14.2.0-19+rpi1) ]
         ignore line: [COMPILER_PATH=/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/14/:/usr/libexec/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/14/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/14/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3c5c4' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_3c5c4.']
-        link line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cct4PpRt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_3c5c4 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_06b89' '-shared-libgcc'  '-mfloat-abi=hard' '-mtls-dialect=gnu' '-marm' '-mlibarch=armv6+fp' '-march=armv6+fp' '-dumpdir' 'cmTC_06b89.']
+        link line: [ /usr/libexec/gcc/arm-linux-gnueabihf/14/collect2 -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCHJTP0.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_06b89 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
           arg [/usr/libexec/gcc/arm-linux-gnueabihf/14/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/cct4PpRt.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccCHJTP0.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -488,7 +488,7 @@ events:
           arg [-m] ==> ignore
           arg [armelf_linux_eabi] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_3c5c4] ==> ignore
+          arg [cmTC_06b89] ==> ignore
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o]
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o]
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o]
@@ -498,7 +498,7 @@ events:
           arg [-L/lib/arm-linux-gnueabihf] ==> dir [/lib/arm-linux-gnueabihf]
           arg [-L/usr/lib/arm-linux-gnueabihf] ==> dir [/usr/lib/arm-linux-gnueabihf]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc_s] ==> lib [gcc_s]
@@ -509,7 +509,7 @@ events:
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o]
           arg [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o] ==> obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
         ignore line: [collect2 version 14.2.0]
-        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cct4PpRt.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_3c5c4 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_3c5c4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
+        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/arm-linux-gnueabihf/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/arm-linux-gnueabihf/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCHJTP0.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu --as-needed -m armelf_linux_eabi -o cmTC_06b89 /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/14/crtbegin.o -L/usr/lib/gcc/arm-linux-gnueabihf/14 -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/14/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf -v CMakeFiles/cmTC_06b89.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/14/crtend.o /usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crtn.o]
         linker tool for 'CXX': /usr/bin/ld
         collapse obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crt1.o] ==> [/usr/lib/arm-linux-gnueabihf/crt1.o]
         collapse obj [/usr/lib/gcc/arm-linux-gnueabihf/14/../../../arm-linux-gnueabihf/crti.o] ==> [/usr/lib/arm-linux-gnueabihf/crti.o]
@@ -546,8 +546,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-ELFBou"
-      binary: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-ELFBou"
+      source: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-T2urv8"
+      binary: "/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-T2urv8"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -556,17 +556,17 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-ELFBou'
+        Change Dir: '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-T2urv8'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_14bb7/fast
-        /usr/bin/gmake  -f CMakeFiles/cmTC_14bb7.dir/build.make CMakeFiles/cmTC_14bb7.dir/build
-        gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-ELFBou'
-        Building C object CMakeFiles/cmTC_14bb7.dir/src.c.o
-        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu11 -o CMakeFiles/cmTC_14bb7.dir/src.c.o -c /home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-ELFBou/src.c
-        Linking C executable cmTC_14bb7
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_14bb7.dir/link.txt --verbose=1
-        /usr/bin/cc CMakeFiles/cmTC_14bb7.dir/src.c.o -o cmTC_14bb7
-        gmake[1]: Leaving directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-ELFBou'
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_79899/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_79899.dir/build.make CMakeFiles/cmTC_79899.dir/build
+        gmake[1]: Entering directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-T2urv8'
+        Building C object CMakeFiles/cmTC_79899.dir/src.c.o
+        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu11 -o CMakeFiles/cmTC_79899.dir/src.c.o -c /home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-T2urv8/src.c
+        Linking C executable cmTC_79899
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_79899.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_79899.dir/src.c.o -o cmTC_79899
+        gmake[1]: Leaving directory '/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/CMakeScratch/TryCompile-T2urv8'
         
       exitCode: 0
 ...

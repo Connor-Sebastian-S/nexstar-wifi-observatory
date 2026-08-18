@@ -25,6 +25,47 @@ namespace
         20.0;
 
 
+    /*
+     * Osculating orbital elements at epoch J2000.0 (JD 2451545.0,
+     * i.e. d = JD - 2451543.5 in this file's day-number
+     * convention), with per-day rates.
+     *
+     * Source: the same low-precision planetary theory used
+     * throughout this file for the Moon (Paul Schlyter,
+     * "Keplerian elements for approximate positions of the
+     * major planets", stjarnhimlen.se/comp/ppcomp.html).
+     * Good to a few arcminutes -- intended for GoTo pointing,
+     * not for high-precision astrometry.
+     */
+    struct PlanetElements
+    {
+        const char* name;
+
+        double N0, Nd;   // longitude of ascending node (deg, deg/day)
+        double i0, id;   // inclination (deg, deg/day)
+        double w0, wd;   // argument of perihelion (deg, deg/day)
+        double a;        // semi-major axis (AU)
+        double e0, ed;   // eccentricity
+        double M0, Md;   // mean anomaly (deg, deg/day)
+    };
+
+    constexpr PlanetElements PLANETS[] =
+    {
+        { "Mercury", 48.3313,  3.24587e-5,  7.0047,  5.00e-8,  29.1241,  1.01444e-5, 0.387098, 0.205635,  5.59e-10,  168.6562, 4.0923344368 },
+        { "Venus",   76.6799,  2.46590e-5,  3.3946,  2.75e-8,  54.8910,  1.38374e-5, 0.723330, 0.006773, -1.302e-9,   48.0052, 1.6021302244 },
+        { "Mars",    49.5574,  2.11081e-5,  1.8497, -1.78e-8, 286.5016,  2.92961e-5, 1.523688, 0.093405,  2.516e-9,   18.6021, 0.5240207766 },
+        { "Jupiter", 100.4542, 2.76854e-5,  1.3030, -1.557e-7, 273.8777, 1.64505e-5, 5.20256,  0.048498,  4.469e-9,   19.8950, 0.0830853001 },
+        { "Saturn",  113.6634, 2.38980e-5,  2.4886, -1.081e-7, 339.3939, 2.97661e-5, 9.55475,  0.055546, -9.499e-9,  316.9670, 0.0334442282 },
+        { "Uranus",  74.0005,  1.3978e-5,   0.7733,  1.9e-8,    96.6612,  3.0565e-5, 19.18171, 0.047318, -1.55e-8,   142.5905, 0.011725806  },
+        { "Neptune", 131.7806, 3.0173e-5,   1.7700, -2.55e-7,  272.8461, -6.027e-6,  30.05826, 0.008606,  3.313e-8,  260.2471, 0.005995147  },
+    };
+
+    constexpr int PLANET_COUNT =
+        static_cast<int>(
+            sizeof(PLANETS) / sizeof(PLANETS[0])
+        );
+
+
     double clamp(
         double value,
         double minimum,
@@ -95,6 +136,61 @@ namespace
             )
             *
             RAD_TO_DEG;
+    }
+
+
+    /*
+     * Solve Kepler's equation E - e*sin(E) = M for the
+     * eccentric anomaly E, given M and e in degrees / plain
+     * eccentricity. Same iterative approach already used
+     * inline in calculateMoonPosition().
+     */
+    double solveKeplerDeg(
+        double meanAnomalyDeg,
+        double eccentricity
+    )
+    {
+        double E =
+            meanAnomalyDeg
+            +
+            eccentricity *
+            RAD_TO_DEG *
+            sinDeg(meanAnomalyDeg) *
+            (
+                1.0 +
+                eccentricity *
+                cosDeg(meanAnomalyDeg)
+            );
+
+        for (
+            int iteration = 0;
+            iteration < 8;
+            ++iteration
+        )
+        {
+            double correction =
+                (
+                    E
+                    -
+                    eccentricity *
+                    RAD_TO_DEG *
+                    sinDeg(E)
+                    -
+                    meanAnomalyDeg
+                )
+                /
+                (
+                    1.0
+                    -
+                    eccentricity *
+                    cosDeg(E)
+                );
+
+            E -=
+                correction;
+        }
+
+        return E;
     }
 
 
@@ -1113,6 +1209,410 @@ void SkyCatalogue::calculateMoonPosition(
 }
 
 
+void SkyCatalogue::sunHeliocentric(
+    double jd,
+    double& distanceAu,
+    double& longitudeDeg
+)
+{
+    /*
+     * Earth's own osculating elements, expressed the same way
+     * as the PLANETS table (N and i are exactly zero by
+     * definition of the ecliptic).
+     */
+
+    double d =
+        jd -
+        2451543.5;
+
+    double w =
+        normaliseDegrees(
+            282.9404 +
+            4.70935e-5 * d
+        );
+
+    double a =
+        1.000000;
+
+    double e =
+        0.016709 -
+        1.151e-9 * d;
+
+    double M =
+        normaliseDegrees(
+            356.0470 +
+            0.9856002585 * d
+        );
+
+    double E =
+        solveKeplerDeg(
+            M,
+            e
+        );
+
+    double xv =
+        cosDeg(E) -
+        e;
+
+    double yv =
+        std::sqrt(
+            1.0 -
+            e * e
+        )
+        *
+        sinDeg(E);
+
+    double r =
+        std::sqrt(
+            xv * xv +
+            yv * yv
+        )
+        *
+        a;
+
+    double v =
+        atan2Deg(
+            yv,
+            xv
+        );
+
+    distanceAu =
+        r;
+
+    longitudeDeg =
+        normaliseDegrees(
+            v + w
+        );
+}
+
+
+bool SkyCatalogue::calculatePlanetPosition(
+    int planetIndex,
+    double jd,
+    double& raDeg,
+    double& decDeg,
+    double& distanceAu,
+    double& phaseAngleDeg,
+    double& sunDistanceAu,
+    std::string& name
+)
+{
+    if (
+        planetIndex < 0 ||
+        planetIndex >= PLANET_COUNT
+    )
+    {
+        return false;
+    }
+
+    const PlanetElements& elements =
+        PLANETS[planetIndex];
+
+    name =
+        elements.name;
+
+    double d =
+        jd -
+        2451543.5;
+
+    double N =
+        normaliseDegrees(
+            elements.N0 +
+            elements.Nd * d
+        );
+
+    double inclination =
+        elements.i0 +
+        elements.id * d;
+
+    double w =
+        normaliseDegrees(
+            elements.w0 +
+            elements.wd * d
+        );
+
+    double a =
+        elements.a;
+
+    double e =
+        elements.e0 +
+        elements.ed * d;
+
+    double M =
+        normaliseDegrees(
+            elements.M0 +
+            elements.Md * d
+        );
+
+    double E =
+        solveKeplerDeg(
+            M,
+            e
+        );
+
+    // ------------------------------------------------------
+    // Heliocentric ecliptic rectangular coordinates
+    // ------------------------------------------------------
+
+    double xv =
+        a *
+        (
+            cosDeg(E) -
+            e
+        );
+
+    double yv =
+        a *
+        std::sqrt(
+            1.0 -
+            e * e
+        )
+        *
+        sinDeg(E);
+
+    double v =
+        atan2Deg(
+            yv,
+            xv
+        );
+
+    double r =
+        std::sqrt(
+            xv * xv +
+            yv * yv
+        );
+
+    double cosN =
+        cosDeg(N);
+
+    double sinN =
+        sinDeg(N);
+
+    double cosVW =
+        cosDeg(
+            v + w
+        );
+
+    double sinVW =
+        sinDeg(
+            v + w
+        );
+
+    double xh =
+        r *
+        (
+            cosN * cosVW
+            -
+            sinN * sinVW * cosDeg(inclination)
+        );
+
+    double yh =
+        r *
+        (
+            sinN * cosVW
+            +
+            cosN * sinVW * cosDeg(inclination)
+        );
+
+    double zh =
+        r *
+        sinVW *
+        sinDeg(inclination);
+
+    // ------------------------------------------------------
+    // Geocentric: subtract Earth's heliocentric position
+    // ------------------------------------------------------
+
+    double sunDistAu =
+        0.0;
+
+    double sunLonDeg =
+        0.0;
+
+    sunHeliocentric(
+        jd,
+        sunDistAu,
+        sunLonDeg
+    );
+
+    double xs =
+        sunDistAu *
+        cosDeg(sunLonDeg);
+
+    double ys =
+        sunDistAu *
+        sinDeg(sunLonDeg);
+
+    double xg =
+        xh + xs;
+
+    double yg =
+        yh + ys;
+
+    double zg =
+        zh;
+
+    double delta =
+        std::sqrt(
+            xg * xg +
+            yg * yg +
+            zg * zg
+        );
+
+    double lonecl =
+        atan2Deg(
+            yg,
+            xg
+        );
+
+    double latecl =
+        atan2Deg(
+            zg,
+            std::sqrt(
+                xg * xg +
+                yg * yg
+            )
+        );
+
+    // ------------------------------------------------------
+    // Ecliptic -> equatorial
+    // ------------------------------------------------------
+
+    double epsilon =
+        23.4393 *
+        DEG_TO_RAD;
+
+    double lambda =
+        lonecl *
+        DEG_TO_RAD;
+
+    double beta =
+        latecl *
+        DEG_TO_RAD;
+
+    double ra =
+        std::atan2(
+            std::sin(lambda) * std::cos(epsilon)
+            -
+            std::tan(beta) * std::sin(epsilon),
+            std::cos(lambda)
+        );
+
+    double dec =
+        std::asin(
+            std::sin(beta) * std::cos(epsilon)
+            +
+            std::cos(beta) * std::sin(epsilon) * std::sin(lambda)
+        );
+
+    raDeg =
+        normaliseDegrees(
+            ra * RAD_TO_DEG
+        );
+
+    decDeg =
+        dec * RAD_TO_DEG;
+
+    distanceAu =
+        delta;
+
+    sunDistanceAu =
+        r;
+
+    // ------------------------------------------------------
+    // Phase angle (Sun-planet-Earth angle), for magnitude
+    // ------------------------------------------------------
+
+    double cosPhase =
+        (
+            r * r +
+            delta * delta -
+            sunDistAu * sunDistAu
+        )
+        /
+        (
+            2.0 * r * delta
+        );
+
+    phaseAngleDeg =
+        std::acos(
+            clamp(
+                cosPhase,
+                -1.0,
+                1.0
+            )
+        )
+        *
+        RAD_TO_DEG;
+
+    return true;
+}
+
+
+double SkyCatalogue::planetMagnitude(
+    const std::string& name,
+    double sunDistanceAu,
+    double earthDistanceAu,
+    double phaseAngleDeg
+)
+{
+    double base =
+        5.0 *
+        std::log10(
+            sunDistanceAu *
+            earthDistanceAu
+        );
+
+    double fv =
+        phaseAngleDeg;
+
+    if (name == "Mercury")
+    {
+        return -0.36 + base + 0.027 * fv + 2.2e-13 * std::pow(fv, 6.0);
+    }
+
+    if (name == "Venus")
+    {
+        return -4.34 + base + 0.013 * fv + 4.2e-7 * std::pow(fv, 3.0);
+    }
+
+    if (name == "Mars")
+    {
+        return -1.51 + base + 0.016 * fv;
+    }
+
+    if (name == "Jupiter")
+    {
+        return -9.25 + base + 0.014 * fv;
+    }
+
+    if (name == "Saturn")
+    {
+        // Ring contribution ignored -- a fixed offset is used
+        // rather than modelling ring-plane opening angle.
+        return -8.88 + base + 0.044 * fv;
+    }
+
+    if (name == "Uranus")
+    {
+        return -7.19 + base + 0.0028 * fv;
+    }
+
+    if (name == "Neptune")
+    {
+        return -6.87 + base;
+    }
+
+    return 99.0;
+}
+
+
+int SkyCatalogue::planetCount()
+{
+    return PLANET_COUNT;
+}
+
+
 double SkyCatalogue::angularSeparationDegrees(
     double ra1Deg,
     double dec1Deg,
@@ -1755,12 +2255,14 @@ SkyState SkyCatalogue::calculate(
         true;
 
 
-    if (
-        !result.darkEnough
-    )
-    {
-        return result;
-    }
+    /*
+     * Note: we deliberately do NOT return early when
+     * !result.darkEnough. The DSO query and planet loop below
+     * still run so callers (e.g. the web UI) can show a
+     * "here's what will be visible once it's dark" preview,
+     * plus which planets/the Moon are up right now, instead of
+     * just an empty target list during daylight.
+     */
 
 
     // --------------------------------------------------------
@@ -1802,6 +2304,22 @@ SkyState SkyCatalogue::calculate(
             WHERE
                 o.v_mag > 0
                 AND o.v_mag <= ?
+
+                /*
+                 * object_type 12 = Stellarium's NebDn (dark
+                 * nebula). For these records the "v_mag" column
+                 * doesn't hold a real magnitude at all -- per
+                 * Stellarium's own Nebula::vMag comment, it
+                 * stores an opacity class (roughly 1-6) instead.
+                 * Left in, small opacity numbers get treated as
+                 * implausibly bright magnitudes and crowd out
+                 * every genuine bright target. Dark nebulae also
+                 * aren't a good fit for a single-point GoTo
+                 * recommendation anyway -- they're seen by
+                 * silhouette against a star field, not by
+                 * pointing at a bright thing.
+                 */
+                AND o.object_type != 12
 
                 AND (
                     o.messier > 0
@@ -2097,6 +2615,245 @@ SkyState SkyCatalogue::calculate(
     sqlite3_finalize(
         statement
     );
+
+
+    // --------------------------------------------------------
+    // Planets
+    //
+    // These don't live in the catalogue database -- they move,
+    // so their positions are computed analytically for the
+    // requested time, the same way the Sun and Moon already
+    // are above.
+    // --------------------------------------------------------
+
+    for (
+        int planetIndex = 0;
+        planetIndex < planetCount();
+        ++planetIndex
+    )
+    {
+        double planetRa =
+            0.0;
+
+        double planetDec =
+            0.0;
+
+        double planetDistanceAu =
+            0.0;
+
+        double phaseAngleDeg =
+            0.0;
+
+        double sunDistanceAu =
+            0.0;
+
+        std::string planetName;
+
+
+        bool ok =
+            calculatePlanetPosition(
+                planetIndex,
+                jd,
+                planetRa,
+                planetDec,
+                planetDistanceAu,
+                phaseAngleDeg,
+                sunDistanceAu,
+                planetName
+            );
+
+
+        if (
+            !ok
+        )
+        {
+            continue;
+        }
+
+
+        double magnitude =
+            planetMagnitude(
+                planetName,
+                sunDistanceAu,
+                planetDistanceAu,
+                phaseAngleDeg
+            );
+
+
+        if (
+            magnitude >
+            maximumMagnitude
+        )
+        {
+            continue;
+        }
+
+
+        double altitude =
+            0.0;
+
+        double azimuth =
+            0.0;
+
+
+        equatorialToHorizontal(
+            planetRa,
+            planetDec,
+            latitudeDeg,
+            longitudeDeg,
+            jd,
+            altitude,
+            azimuth
+        );
+
+
+        if (
+            altitude <
+            minimumAltitudeDeg
+        )
+        {
+            continue;
+        }
+
+
+        double moonSeparation =
+            angularSeparationDegrees(
+                planetRa,
+                planetDec,
+                result.moon.raDeg,
+                result.moon.decDeg
+            );
+
+
+        if (
+            moonSeparation <
+            MOON_MIN_SEPARATION_DEG
+        )
+        {
+            continue;
+        }
+
+
+        double altitudeScore =
+            clamp(
+                (
+                    altitude -
+                    minimumAltitudeDeg
+                )
+                /
+                (
+                    90.0 -
+                    minimumAltitudeDeg
+                ),
+                0.0,
+                1.0
+            );
+
+
+        double magnitudeScore =
+            clamp(
+                (
+                    maximumMagnitude -
+                    magnitude
+                )
+                /
+                maximumMagnitude,
+                0.0,
+                1.0
+            );
+
+
+        double zenithBonus =
+            clamp(
+                1.0 -
+                (
+                    std::abs(
+                        altitude -
+                        60.0
+                    )
+                    /
+                    60.0
+                ),
+                0.0,
+                1.0
+            );
+
+
+        double moonScore =
+            clamp(
+                (
+                    moonSeparation -
+                    MOON_MIN_SEPARATION_DEG
+                )
+                /
+                70.0,
+                0.0,
+                1.0
+            );
+
+
+        double score =
+            (
+                magnitudeScore *
+                0.45
+            )
+            +
+            (
+                altitudeScore *
+                0.30
+            )
+            +
+            (
+                zenithBonus *
+                0.10
+            )
+            +
+            (
+                moonScore *
+                0.15
+            );
+
+
+        SkyTarget target;
+
+        target.objectId =
+            -(planetIndex + 1);
+
+        target.designation =
+            planetName;
+
+        target.name =
+            planetName;
+
+        target.raDeg =
+            planetRa;
+
+        target.decDeg =
+            planetDec;
+
+        target.magnitude =
+            magnitude;
+
+        target.altitudeDeg =
+            altitude;
+
+        target.azimuthDeg =
+            azimuth;
+
+        target.moonSeparationDeg =
+            moonSeparation;
+
+        target.score =
+            score;
+
+        target.isPlanet =
+            true;
+
+
+        result.targets.push_back(
+            target
+        );
+    }
 
 
     std::sort(
