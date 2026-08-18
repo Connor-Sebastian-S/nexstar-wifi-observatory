@@ -1,3 +1,0 @@
-/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/telescopehub.dir
-/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/edit_cache.dir
-/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles/rebuild_cache.dir
