@@ -16,6 +16,49 @@
 #include <ctime>
 
 
+namespace
+{
+    // Formats a UTC epoch as a local "HH:MM" string, matching
+    // the pattern already used for Moon rise/set elsewhere in
+    // this file. Returns an em-dash if epoch is invalid/zero.
+    std::string formatLocalTime(
+        std::time_t epochUtc,
+        bool valid
+    )
+    {
+        if (
+            !valid
+        )
+        {
+            return
+                "—";
+        }
+
+        std::tm localTime{};
+
+        localtime_r(
+            &epochUtc,
+            &localTime
+        );
+
+        char text[32] =
+            {};
+
+        std::strftime(
+            text,
+            sizeof(text),
+            "%H:%M",
+            &localTime
+        );
+
+        return
+            std::string(
+                text
+            );
+    }
+}
+
+
 // ============================================================
 // Constructor
 // ============================================================
@@ -1844,16 +1887,6 @@ std::string WebServer::buildHtml() const
                     )
                     << "</strong>.";
             }
-            else{
-                html
-                    << " Right now there's no planets visible"
-                    << htmlEscape(
-                        joinNames(
-                            visiblePlanets
-                        )
-                    )
-                    << "</strong>.";
-            }
 
 
             if (
@@ -1870,9 +1903,14 @@ std::string WebServer::buildHtml() const
 
 
             html
+                << " Full list below shows everything that "
+                   "qualifies right now, regardless of "
+                   "brightness."
                 << "</div>";
         }
-        else if (
+
+
+        if (
             _state.sky.targets.empty()
         )
         {
@@ -1884,7 +1922,13 @@ std::string WebServer::buildHtml() const
         else
         {
             html
-                << "<h3>Recommended targets</h3>"
+                << "<h3>"
+                << (
+                    _state.sky.darkEnough
+                        ? "Recommended targets"
+                        : "Everything currently up"
+                )
+                << "</h3>"
                 << "<table>"
                 << "<tr>"
                 << "<th>Target</th>"
@@ -1892,6 +1936,7 @@ std::string WebServer::buildHtml() const
                 << "<th>Az</th>"
                 << "<th>Mag</th>"
                 << "<th>Moon</th>"
+                << "<th>Best time</th>"
                 << "<th></th>"
                 << "</tr>";
 
@@ -1953,6 +1998,37 @@ std::string WebServer::buildHtml() const
                     << target.moonSeparationDeg
                     << "&deg;"
                     << "</td>"
+                    << "<td>";
+
+
+                if (
+                    target.bestAltitudeDeg -
+                    target.altitudeDeg
+                    <
+                    0.5
+                )
+                {
+                    html
+                        << "Now";
+                }
+                else
+                {
+                    html
+                        << formatLocalTime(
+                            target.bestTimeEpochUtc,
+                            true
+                        )
+                        << " ("
+                        << std::fixed
+                        << std::setprecision(0)
+                        << target.bestAltitudeDeg
+                        << "&deg;)"
+                        << std::setprecision(1);
+                }
+
+
+                html
+                    << "</td>"
                     << "<td>"
                     << "<button "
                        "class=\"goto-button\" "
@@ -1971,6 +2047,138 @@ std::string WebServer::buildHtml() const
             html
                 << "</table>";
         }
+    }
+
+
+    if (
+        !_state.sky.meteorShowers.empty()
+    )
+    {
+        html
+            << "<h3>Meteor showers active now</h3>"
+            << "<table>"
+            << "<tr>"
+            << "<th>Shower</th>"
+            << "<th>ZHR</th>"
+            << "<th>Peak</th>"
+            << "<th>Radiant</th>"
+            << "<th>Notes</th>"
+            << "</tr>";
+
+
+        for (
+            const MeteorShowerStatus& shower :
+            _state.sky.meteorShowers
+        )
+        {
+            html
+                << "<tr>"
+                << "<td><strong>"
+                << htmlEscape(
+                    shower.name
+                )
+                << "</strong></td>"
+                << "<td>"
+                << std::fixed
+                << std::setprecision(0)
+                << shower.zhr
+                << "</td>"
+                << "<td>";
+
+
+            if (
+                shower.daysToPeak ==
+                0
+            )
+            {
+                html
+                    << "Today";
+            }
+            else if (
+                shower.daysToPeak >
+                0
+            )
+            {
+                html
+                    << "In "
+                    << shower.daysToPeak
+                    << (
+                        shower.daysToPeak == 1
+                            ? " day"
+                            : " days"
+                    );
+            }
+            else
+            {
+                html
+                    << (
+                        -shower.daysToPeak
+                    )
+                    << (
+                        shower.daysToPeak == -1
+                            ? " day ago"
+                            : " days ago"
+                    );
+            }
+
+
+            html
+                << "</td>"
+                << "<td>";
+
+
+            if (
+                shower.radiantUp
+            )
+            {
+                html
+                    << std::setprecision(0)
+                    << shower.radiantAltitudeDeg
+                    << "&deg; alt / "
+                    << shower.radiantAzimuthDeg
+                    << "&deg; az";
+            }
+            else
+            {
+                html
+                    << "below horizon";
+            }
+
+
+            html
+                << "</td>"
+                << "<td>";
+
+
+            if (
+                !shower.radiantUp
+            )
+            {
+                html
+                    << "Radiant not up right now";
+            }
+            else if (
+                shower.moonInterferes
+            )
+            {
+                html
+                    << "Moon will wash out fainter meteors";
+            }
+            else
+            {
+                html
+                    << "Good conditions";
+            }
+
+
+            html
+                << "</td>"
+                << "</tr>";
+        }
+
+
+        html
+            << "</table>";
     }
 
 

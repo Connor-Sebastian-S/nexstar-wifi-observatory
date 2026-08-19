@@ -86,6 +86,67 @@ struct SkyTarget
      */
     bool isPlanet =
         false;
+
+    /*
+     * "Best time tonight" preview: the highest altitude this
+     * target reaches within the next several hours (see
+     * TRANSIT_SEARCH_WINDOW_HOURS in SkyCatalogue.cpp), and the
+     * UTC epoch at which that happens. For a target that's
+     * already past its peak for the night, bestTimeEpochUtc
+     * will be at or near "now".
+     */
+    double bestAltitudeDeg =
+        0.0;
+
+    std::time_t bestTimeEpochUtc =
+        0;
+};
+
+
+/*
+ * One row of the built-in major-meteor-shower almanac, evaluated
+ * for the requested date/time/location.
+ */
+struct MeteorShowerStatus
+{
+    std::string name;
+
+    std::string parentBody;
+
+    double zhr =
+        0.0;
+
+    // True if today's date falls within the shower's active
+    // window (which may span a calendar year boundary).
+    bool active =
+        false;
+
+    // Positive: days remaining until peak. Negative: days since
+    // peak already passed (still within the active window).
+    int daysToPeak =
+        0;
+
+    double radiantRaDeg =
+        0.0;
+
+    double radiantDecDeg =
+        0.0;
+
+    double radiantAltitudeDeg =
+        0.0;
+
+    double radiantAzimuthDeg =
+        0.0;
+
+    // True if the radiant is currently above a reasonable
+    // observing altitude (see METEOR_MIN_RADIANT_ALTITUDE_DEG).
+    bool radiantUp =
+        false;
+
+    // True if the Moon is up and bright enough to meaningfully
+    // wash out fainter meteors.
+    bool moonInterferes =
+        false;
 };
 
 
@@ -104,6 +165,9 @@ struct SkyState
 
     std::vector<SkyTarget>
         targets;
+
+    std::vector<MeteorShowerStatus>
+        meteorShowers;
 };
 
 
@@ -244,6 +308,40 @@ private:
 
 
     static int planetCount();
+
+
+    /*
+     * "Best time tonight": searches forward from startJd across
+     * TRANSIT_SEARCH_WINDOW_HOURS, sampling altitude every few
+     * minutes, and returns the highest altitude reached and the
+     * UTC epoch at which it occurs. The target's RA/Dec are
+     * treated as fixed over the search window -- fine for DSOs,
+     * and close enough for planets over a single night.
+     */
+    static void findBestAltitudeWindow(
+        double raDeg,
+        double decDeg,
+        double latitudeDeg,
+        double longitudeDeg,
+        double startJd,
+        std::time_t startEpochUtc,
+        double& bestAltitudeDeg,
+        std::time_t& bestEpochUtc
+    );
+
+
+    /*
+     * Evaluates the built-in major-meteor-shower almanac against
+     * the given date/location/Moon state.
+     */
+    static std::vector<MeteorShowerStatus> calculateMeteorShowers(
+        double latitudeDeg,
+        double longitudeDeg,
+        int month,
+        int day,
+        double jd,
+        const MoonState& moon
+    );
 
 
     static MoonState calculateMoonState(

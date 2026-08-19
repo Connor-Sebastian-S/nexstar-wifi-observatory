@@ -229,6 +229,88 @@ namespace
             ];
     }
 
+
+    /*
+     * Non-leap-year day-of-year, used only for the meteor
+     * shower almanac's date-range checks. A day or two of
+     * leap-year slop doesn't matter for "is this shower
+     * roughly active".
+     */
+    int dayOfYearApprox(
+        int month,
+        int day
+    )
+    {
+        static const int cumulativeDays[] =
+        {
+            0, 31, 59, 90, 120, 151,
+            181, 212, 243, 273, 304, 334
+        };
+
+        return
+            cumulativeDays[
+                month - 1
+            ]
+            +
+            day;
+    }
+
+
+    constexpr double METEOR_MIN_RADIANT_ALTITUDE_DEG =
+        10.0;
+
+
+    constexpr double TRANSIT_SEARCH_WINDOW_HOURS =
+        12.0;
+
+
+    constexpr double TRANSIT_STEP_MINUTES =
+        10.0;
+
+
+    struct MeteorShowerElements
+    {
+        const char* name;
+        const char* parentBody;
+
+        double zhr;
+
+        int startMonth, startDay;
+        int endMonth, endDay;
+        int peakMonth, peakDay;
+
+        double radiantRaDeg;
+        double radiantDecDeg;
+    };
+
+    /*
+     * The dozen or so reliably-active annual showers. Radiant
+     * coordinates are approximate values near each shower's
+     * peak (real radiants drift several degrees over the active
+     * window) -- fine for "roughly where to look", not for
+     * precise meteor-count science.
+     */
+    constexpr MeteorShowerElements METEOR_SHOWERS[] =
+    {
+        { "Quadrantids", "asteroid 2003 EH1", 120.0, 12, 28, 1, 12, 1, 4, 230.1, 48.5 },
+        { "Lyrids", "Comet C/1861 G1 (Thatcher)", 18.0, 4, 14, 4, 30, 4, 22, 271.4, 33.6 },
+        { "Eta Aquariids", "Comet 1P/Halley", 50.0, 4, 19, 5, 28, 5, 5, 338.0, -1.0 },
+        { "Southern delta Aquariids", "Comet 96P/Machholz (probable)", 25.0, 7, 12, 8, 23, 7, 30, 339.0, -16.4 },
+        { "Perseids", "Comet 109P/Swift-Tuttle", 100.0, 7, 17, 8, 24, 8, 12, 46.2, 57.4 },
+        { "Southern Taurids", "Comet 2P/Encke", 5.0, 9, 10, 11, 20, 10, 10, 32.8, 9.1 },
+        { "Draconids", "Comet 21P/Giacobini-Zinner", 10.0, 10, 6, 10, 10, 10, 8, 262.0, 54.0 },
+        { "Orionids", "Comet 1P/Halley", 20.0, 10, 2, 11, 7, 10, 21, 95.3, 15.6 },
+        { "Northern Taurids", "Comet 2P/Encke", 5.0, 10, 20, 12, 10, 11, 12, 58.1, 22.3 },
+        { "Leonids", "Comet 55P/Tempel-Tuttle", 15.0, 11, 6, 11, 30, 11, 17, 152.3, 22.2 },
+        { "Geminids", "asteroid 3200 Phaethon", 150.0, 12, 4, 12, 17, 12, 13, 112.3, 32.5 },
+        { "Ursids", "Comet 8P/Tuttle", 10.0, 12, 17, 12, 26, 12, 22, 217.4, 75.4 },
+    };
+
+    constexpr int METEOR_SHOWER_COUNT =
+        static_cast<int>(
+            sizeof(METEOR_SHOWERS) / sizeof(METEOR_SHOWERS[0])
+        );
+
 }
 
 
@@ -1613,6 +1695,268 @@ int SkyCatalogue::planetCount()
 }
 
 
+void SkyCatalogue::findBestAltitudeWindow(
+    double raDeg,
+    double decDeg,
+    double latitudeDeg,
+    double longitudeDeg,
+    double startJd,
+    std::time_t startEpochUtc,
+    double& bestAltitudeDeg,
+    std::time_t& bestEpochUtc
+)
+{
+    bestAltitudeDeg =
+        -90.0;
+
+    bestEpochUtc =
+        startEpochUtc;
+
+    int steps =
+        static_cast<int>(
+            (
+                TRANSIT_SEARCH_WINDOW_HOURS *
+                60.0
+            )
+            /
+            TRANSIT_STEP_MINUTES
+        );
+
+    for (
+        int step = 0;
+        step <= steps;
+        ++step
+    )
+    {
+        double jd =
+            startJd
+            +
+            (
+                step *
+                TRANSIT_STEP_MINUTES
+            )
+            /
+            1440.0;
+
+        double altitude =
+            0.0;
+
+        double azimuth =
+            0.0;
+
+        equatorialToHorizontal(
+            raDeg,
+            decDeg,
+            latitudeDeg,
+            longitudeDeg,
+            jd,
+            altitude,
+            azimuth
+        );
+
+        if (
+            altitude >
+            bestAltitudeDeg
+        )
+        {
+            bestAltitudeDeg =
+                altitude;
+
+            bestEpochUtc =
+                startEpochUtc
+                +
+                static_cast<std::time_t>(
+                    std::llround(
+                        step *
+                        TRANSIT_STEP_MINUTES *
+                        60.0
+                    )
+                );
+        }
+    }
+}
+
+
+std::vector<MeteorShowerStatus> SkyCatalogue::calculateMeteorShowers(
+    double latitudeDeg,
+    double longitudeDeg,
+    int month,
+    int day,
+    double jd,
+    const MoonState& moon
+)
+{
+    std::vector<MeteorShowerStatus> result;
+
+    int todayDoy =
+        dayOfYearApprox(
+            month,
+            day
+        );
+
+
+    for (
+        int index = 0;
+        index < METEOR_SHOWER_COUNT;
+        ++index
+    )
+    {
+        const MeteorShowerElements& elements =
+            METEOR_SHOWERS[index];
+
+        int startDoy =
+            dayOfYearApprox(
+                elements.startMonth,
+                elements.startDay
+            );
+
+        int endDoy =
+            dayOfYearApprox(
+                elements.endMonth,
+                elements.endDay
+            );
+
+        int peakDoy =
+            dayOfYearApprox(
+                elements.peakMonth,
+                elements.peakDay
+            );
+
+
+        bool active =
+            false;
+
+        if (
+            startDoy <=
+            endDoy
+        )
+        {
+            active =
+                todayDoy >= startDoy &&
+                todayDoy <= endDoy;
+        }
+        else
+        {
+            // Window spans the year boundary (e.g. Quadrantids,
+            // Dec 28 -> Jan 12).
+            active =
+                todayDoy >= startDoy ||
+                todayDoy <= endDoy;
+        }
+
+        if (
+            !active
+        )
+        {
+            continue;
+        }
+
+
+        // Signed day distance to peak, taking the shortest path
+        // around the year so a shower whose window wraps
+        // Dec/Jan still reports a sensible small number.
+        int daysToPeak =
+            peakDoy -
+            todayDoy;
+
+        if (
+            daysToPeak >
+            182
+        )
+        {
+            daysToPeak -=
+                365;
+        }
+        else if (
+            daysToPeak <
+            -182
+        )
+        {
+            daysToPeak +=
+                365;
+        }
+
+
+        double altitude =
+            0.0;
+
+        double azimuth =
+            0.0;
+
+        equatorialToHorizontal(
+            elements.radiantRaDeg,
+            elements.radiantDecDeg,
+            latitudeDeg,
+            longitudeDeg,
+            jd,
+            altitude,
+            azimuth
+        );
+
+
+        MeteorShowerStatus status;
+
+        status.name =
+            elements.name;
+
+        status.parentBody =
+            elements.parentBody;
+
+        status.zhr =
+            elements.zhr;
+
+        status.active =
+            true;
+
+        status.daysToPeak =
+            daysToPeak;
+
+        status.radiantRaDeg =
+            elements.radiantRaDeg;
+
+        status.radiantDecDeg =
+            elements.radiantDecDeg;
+
+        status.radiantAltitudeDeg =
+            altitude;
+
+        status.radiantAzimuthDeg =
+            azimuth;
+
+        status.radiantUp =
+            altitude >=
+            METEOR_MIN_RADIANT_ALTITUDE_DEG;
+
+        status.moonInterferes =
+            moon.aboveHorizon &&
+            moon.illuminationPercent >=
+                40.0;
+
+        result.push_back(
+            status
+        );
+    }
+
+
+    std::sort(
+        result.begin(),
+        result.end(),
+        [](
+            const MeteorShowerStatus& a,
+            const MeteorShowerStatus& b
+        )
+        {
+            return
+                std::abs(a.daysToPeak) <
+                std::abs(b.daysToPeak);
+        }
+    );
+
+
+    return result;
+}
+
+
 double SkyCatalogue::angularSeparationDegrees(
     double ra1Deg,
     double dec1Deg,
@@ -2606,6 +2950,18 @@ SkyState SkyCatalogue::calculate(
             score;
 
 
+        findBestAltitudeWindow(
+            ra,
+            dec,
+            latitudeDeg,
+            longitudeDeg,
+            jd,
+            currentEpochUtc,
+            target.bestAltitudeDeg,
+            target.bestTimeEpochUtc
+        );
+
+
         result.targets.push_back(
             target
         );
@@ -2850,10 +3206,33 @@ SkyState SkyCatalogue::calculate(
             true;
 
 
+        findBestAltitudeWindow(
+            planetRa,
+            planetDec,
+            latitudeDeg,
+            longitudeDeg,
+            jd,
+            currentEpochUtc,
+            target.bestAltitudeDeg,
+            target.bestTimeEpochUtc
+        );
+
+
         result.targets.push_back(
             target
         );
     }
+
+
+    result.meteorShowers =
+        calculateMeteorShowers(
+            latitudeDeg,
+            longitudeDeg,
+            month,
+            day,
+            jd,
+            result.moon
+        );
 
 
     std::sort(
