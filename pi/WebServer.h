@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "SkyCatalogue.h"
+#include "SkyHistory.h"
 
 // ============================================================
 // Telescope state
@@ -315,6 +316,13 @@ public:
     );
 
 
+    // Directory containing Recorder's "*_blackbox.csv" files,
+    // used by the /api/sky-history and /sky-map endpoints.
+    void setRecorderDirectory(
+        const std::string& directory
+    );
+
+
 private:
 
     int _serverSocket;
@@ -334,6 +342,9 @@ private:
 
     std::vector<EnvironmentHistorySample>
         _environmentHistory;
+
+    SkyHistory
+        _skyHistory;
 
 
     static constexpr uint64_t
@@ -358,6 +369,14 @@ private:
 
 
     std::string buildHtml() const;
+
+
+    std::string buildSkyHistoryJson(
+        int rangeDays
+    );
+
+
+    std::string buildSkyMapHtml() const;
 
 
     std::string telescopeConnectionName() const;

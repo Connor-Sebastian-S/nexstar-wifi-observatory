@@ -229,6 +229,9 @@ CMakeFiles/telescopehub.dir/main.cpp.o: \
  /usr/include/c++/14/bits/erase_if.h /usr/include/c++/14/array \
  /usr/include/c++/14/compare \
  /home/nexstar/telescope-nexstar-wifi/pi/SkyCatalogue.h \
+ /home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.h \
+ /usr/include/c++/14/deque /usr/include/c++/14/bits/stl_deque.h \
+ /usr/include/c++/14/bits/deque.tcc \
  /home/nexstar/telescope-nexstar-wifi/pi/GPS.h \
  /home/nexstar/telescope-nexstar-wifi/pi/I2CBus.h \
  /home/nexstar/telescope-nexstar-wifi/pi/EnvironmentSensor.h \

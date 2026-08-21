@@ -249,6 +249,30 @@ SkyCatalogue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/telescopehub.dir/build.make CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.s
 .PHONY : SkyCatalogue.cpp.s
 
+SkyHistory.o: SkyHistory.cpp.o
+.PHONY : SkyHistory.o
+
+# target to build an object file
+SkyHistory.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/telescopehub.dir/build.make CMakeFiles/telescopehub.dir/SkyHistory.cpp.o
+.PHONY : SkyHistory.cpp.o
+
+SkyHistory.i: SkyHistory.cpp.i
+.PHONY : SkyHistory.i
+
+# target to preprocess a source file
+SkyHistory.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/telescopehub.dir/build.make CMakeFiles/telescopehub.dir/SkyHistory.cpp.i
+.PHONY : SkyHistory.cpp.i
+
+SkyHistory.s: SkyHistory.cpp.s
+.PHONY : SkyHistory.s
+
+# target to generate assembly for a file
+SkyHistory.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/telescopehub.dir/build.make CMakeFiles/telescopehub.dir/SkyHistory.cpp.s
+.PHONY : SkyHistory.cpp.s
+
 StellariumServer.o: StellariumServer.cpp.o
 .PHONY : StellariumServer.o
 
@@ -417,6 +441,9 @@ help:
 	@echo "... SkyCatalogue.o"
 	@echo "... SkyCatalogue.i"
 	@echo "... SkyCatalogue.s"
+	@echo "... SkyHistory.o"
+	@echo "... SkyHistory.i"
+	@echo "... SkyHistory.s"
 	@echo "... StellariumServer.o"
 	@echo "... StellariumServer.i"
 	@echo "... StellariumServer.s"

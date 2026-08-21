@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/nexstar/telescope-nexstar-wifi/pi/I2CBus.cpp" "CMakeFiles/telescopehub.dir/I2CBus.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/I2CBus.cpp.o.d"
   "/home/nexstar/telescope-nexstar-wifi/pi/Recorder.cpp" "CMakeFiles/telescopehub.dir/Recorder.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/Recorder.cpp.o.d"
   "/home/nexstar/telescope-nexstar-wifi/pi/SkyCatalogue.cpp" "CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o.d"
+  "/home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.cpp" "CMakeFiles/telescopehub.dir/SkyHistory.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/SkyHistory.cpp.o.d"
   "/home/nexstar/telescope-nexstar-wifi/pi/StellariumServer.cpp" "CMakeFiles/telescopehub.dir/StellariumServer.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/StellariumServer.cpp.o.d"
   "/home/nexstar/telescope-nexstar-wifi/pi/WebServer.cpp" "CMakeFiles/telescopehub.dir/WebServer.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/WebServer.cpp.o.d"
   "/home/nexstar/telescope-nexstar-wifi/pi/compat/Arduino.cpp" "CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o" "gcc" "CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o.d"

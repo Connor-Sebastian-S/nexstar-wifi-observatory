@@ -142,8 +142,10 @@ CMakeFiles/telescopehub.dir/WebServer.cpp.o: \
  /usr/include/arm-linux-gnueabihf/bits/timex.h \
  /usr/include/arm-linux-gnueabihf/bits/types/struct_tm.h \
  /usr/include/arm-linux-gnueabihf/bits/types/struct_itimerspec.h \
- /usr/include/arpa/inet.h /usr/include/netinet/in.h \
- /usr/include/arm-linux-gnueabihf/sys/socket.h \
+ /home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.h \
+ /usr/include/c++/14/deque /usr/include/c++/14/bits/stl_deque.h \
+ /usr/include/c++/14/bits/deque.tcc /usr/include/arpa/inet.h \
+ /usr/include/netinet/in.h /usr/include/arm-linux-gnueabihf/sys/socket.h \
  /usr/include/arm-linux-gnueabihf/bits/types/struct_iovec.h \
  /usr/include/arm-linux-gnueabihf/bits/socket.h \
  /usr/include/arm-linux-gnueabihf/bits/socket_type.h \

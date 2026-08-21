@@ -331,6 +331,16 @@ void WebServer::setGotoHandler(
 }
 
 
+void WebServer::setRecorderDirectory(
+    const std::string& directory
+)
+{
+    _skyHistory.setDirectory(
+        directory
+    );
+}
+
+
 // ============================================================
 // Handle requests
 // ============================================================
@@ -649,6 +659,153 @@ void WebServer::handleClient(
 
 
     // ========================================================
+    // Sky history endpoint (heatmap data)
+    // ========================================================
+
+    if (
+        std::strncmp(
+            request,
+            "GET /api/sky-history",
+            std::strlen(
+                "GET /api/sky-history"
+            )
+        ) == 0
+    )
+    {
+        // Default matches the dome page's default "30d" view.
+        int rangeDays =
+            30;
+
+        const char* rangeParam =
+            std::strstr(
+                request,
+                "range="
+            );
+
+        if (
+            rangeParam
+        )
+        {
+            rangeParam +=
+                6;
+
+            if (
+                std::strncmp(
+                    rangeParam,
+                    "7d",
+                    2
+                ) == 0
+            )
+            {
+                rangeDays =
+                    7;
+            }
+            else if (
+                std::strncmp(
+                    rangeParam,
+                    "all",
+                    3
+                ) == 0
+            )
+            {
+                rangeDays =
+                    0;
+            }
+            else
+            {
+                rangeDays =
+                    30;
+            }
+        }
+
+
+        std::string body =
+            buildSkyHistoryJson(
+                rangeDays
+            );
+
+
+        std::ostringstream output;
+
+        output
+            << "HTTP/1.1 200 OK\r\n"
+            << "Content-Type: application/json\r\n"
+            << "Content-Length: "
+            << body.size()
+            << "\r\n"
+            << "Access-Control-Allow-Origin: *\r\n"
+            << "Cache-Control: no-cache, no-store, must-revalidate\r\n"
+            << "Connection: close\r\n"
+            << "\r\n"
+            << body;
+
+        std::string response =
+            output.str();
+
+        send(
+            clientSocket,
+            response.c_str(),
+            response.size(),
+            0
+        );
+
+        close(
+            clientSocket
+        );
+
+        return;
+    }
+
+
+    // ========================================================
+    // Sky map page (3D heatmap dome)
+    // ========================================================
+
+    if (
+        std::strncmp(
+            request,
+            "GET /sky-map",
+            std::strlen(
+                "GET /sky-map"
+            )
+        ) == 0
+    )
+    {
+        std::string body =
+            buildSkyMapHtml();
+
+        std::ostringstream output;
+
+        output
+            << "HTTP/1.1 200 OK\r\n"
+            << "Content-Type: text/html; charset=utf-8\r\n"
+            << "Cache-Control: no-cache, no-store, must-revalidate\r\n"
+            << "Content-Length: "
+            << body.size()
+            << "\r\n"
+            << "Connection: close\r\n"
+            << "\r\n"
+            << body;
+
+        std::string response =
+            output.str();
+
+        send(
+            clientSocket,
+            response.c_str(),
+            response.size(),
+            0
+        );
+
+        close(
+            clientSocket
+        );
+
+        return;
+    }
+
+
+    // ========================================================
     // Normal dashboard
     // ========================================================
 
@@ -903,6 +1060,655 @@ static void appendEnvironmentData(
 // ============================================================
 // Build HTML
 // ============================================================
+
+std::string WebServer::buildSkyHistoryJson(
+    int rangeDays
+)
+{
+    SkyHistoryResult result =
+        _skyHistory.query(
+            rangeDays
+        );
+
+    std::ostringstream json;
+
+    json
+        << "{"
+        << "\"stats\":{"
+        << "\"totalSessions\":"
+        << result.stats.totalSessions
+        << ",\"totalHours\":"
+        << std::fixed
+        << std::setprecision(1)
+        << result.stats.totalHours
+        << ",\"hasHottest\":"
+        << (
+            result.stats.hasHottest
+                ? "true"
+                : "false"
+        )
+        << ",\"hottestAz\":"
+        << std::setprecision(1)
+        << result.stats.hottestAzDeg
+        << ",\"hottestAlt\":"
+        << result.stats.hottestAltDeg
+        << ",\"hottestCount\":"
+        << result.stats.hottestCount
+        << "},"
+        << "\"cells\":[";
+
+    for (
+        std::size_t i = 0;
+        i < result.cells.size();
+        ++i
+    )
+    {
+        const SkyHistoryCell& cell =
+            result.cells[i];
+
+        if (
+            i > 0
+        )
+        {
+            json
+                << ",";
+        }
+
+        json
+            << "{\"az\":"
+            << std::setprecision(1)
+            << cell.azDeg
+            << ",\"alt\":"
+            << cell.altDeg
+            << ",\"count\":"
+            << cell.count
+            << "}";
+    }
+
+    json
+        << "],"
+        << "\"trail\":[";
+
+    for (
+        std::size_t i = 0;
+        i < result.trail.size();
+        ++i
+    )
+    {
+        const SkyHistoryTrailPoint& point =
+            result.trail[i];
+
+        if (
+            i > 0
+        )
+        {
+            json
+                << ",";
+        }
+
+        json
+            << "{\"az\":"
+            << std::setprecision(1)
+            << point.azDeg
+            << ",\"alt\":"
+            << point.altDeg
+            << "}";
+    }
+
+    json
+        << "]"
+        << "}";
+
+    return
+        json.str();
+}
+
+
+std::string WebServer::buildSkyMapHtml() const
+{
+    return
+        R"SKYMAP_HTML(<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sky Dome &mdash; Observing History</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #05070a;
+    color: #e9e4de;
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+  }
+
+  #mount {
+    position: absolute;
+    inset: 0;
+    cursor: grab;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Fraunces', serif; }
+
+  .overlay {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #topbar {
+    top: 0; left: 0; right: 0;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  #eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: #8a5346;
+    margin-bottom: 6px;
+  }
+
+  #title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #f1ece3;
+  }
+
+  #stats {
+    text-align: right;
+    font-size: 12px;
+    color: #a8907e;
+    line-height: 1.7;
+  }
+
+  #stats .hottest { color: #e2664a; }
+
+  #backlink {
+    pointer-events: auto;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6a5850;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  #backlink:hover { color: #e2664a; }
+
+  #legend {
+    bottom: 24px; left: 24px;
+  }
+
+  #legend-label {
+    font-size: 10px;
+    color: #8a7a6e;
+    margin-bottom: 6px;
+  }
+
+  #legend-bar {
+    width: 140px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgb(27,17,64), rgb(106,27,107), rgb(194,59,74), rgb(255,233,168));
+  }
+
+  #legend-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #8a7a6e;
+    margin-top: 4px;
+    width: 140px;
+  }
+
+  #controls {
+    bottom: 24px; right: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    pointer-events: auto;
+  }
+
+  .btn-group { display: flex; gap: 6px; }
+
+  .sdh-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid #4a2018;
+    color: #c98b78;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .sdh-btn:hover { border-color: #c2452b; color: #f2b9a2; }
+
+  .sdh-btn.active {
+    border-color: #c2452b;
+    color: #ffd9c9;
+    background: rgba(194,69,43,0.12);
+  }
+
+  #hint {
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #5c4a40;
+    letter-spacing: 0.08em;
+  }
+
+  #empty-state {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  #empty-state.visible { display: flex; }
+
+  #empty-state .display { font-size: 20px; color: #d8cfc4; margin-bottom: 8px; }
+  #empty-state .mono { font-size: 12px; color: #7a6a5e; max-width: 320px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div id="mount"></div>
+
+<div id="empty-state">
+  <div class="display">No logged pointings yet</div>
+  <div class="mono">Once the mount has connected and tracked something, this dome fills in from the session blackbox logs.</div>
+</div>
+
+<div class="overlay" id="topbar">
+  <div>
+    <div id="eyebrow" class="mono">OBSERVING LOG &mdash; SKY DOME</div>
+    <div id="title" class="display">Where you've been looking</div>
+    <a id="backlink" href="/">&larr; back to dashboard</a>
+  </div>
+  <div id="stats" class="mono">
+    <div id="stats-line">&mdash; sessions &middot; &mdash;h logged</div>
+    <div class="hottest" id="stats-hottest"></div>
+  </div>
+</div>
+
+<div class="overlay" id="legend">
+  <div id="legend-label" class="mono">VISITS</div>
+  <div id="legend-bar"></div>
+  <div id="legend-scale" class="mono"><span>rare</span><span>frequent</span></div>
+</div>
+
+<div class="overlay" id="controls">
+  <div class="btn-group" id="range-buttons">
+    <button class="sdh-btn" data-range="7d">7d</button>
+    <button class="sdh-btn active" data-range="30d">30d</button>
+    <button class="sdh-btn" data-range="all">all</button>
+  </div>
+  <div class="btn-group" id="mode-buttons">
+    <button class="sdh-btn active" data-mode="heat">heat</button>
+    <button class="sdh-btn" data-mode="trail">trail</button>
+    <button class="sdh-btn" data-mode="both">both</button>
+  </div>
+</div>
+
+<div class="overlay mono" id="hint">DRAG TO LOOK AROUND</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ----------------------------------------------------------
+  // Coordinate helpers (matches SkyHistory's az/alt convention:
+  // azimuth clockwise from North, altitude up from horizon)
+  // ----------------------------------------------------------
+
+  function azAltToVector(azDeg, altDeg, radius) {
+    radius = radius || 1;
+    var az = THREE.MathUtils.degToRad(azDeg);
+    var theta = THREE.MathUtils.degToRad(90 - altDeg);
+    var x = radius * Math.sin(theta) * Math.sin(az);
+    var z = -radius * Math.sin(theta) * Math.cos(az);
+    var y = radius * Math.cos(theta);
+    return new THREE.Vector3(x, y, z);
+  }
+
+  var HEAT_STOPS = [
+    { t: 0.0, c: [27, 17, 64] },
+    { t: 0.35, c: [106, 27, 107] },
+    { t: 0.65, c: [194, 59, 74] },
+    { t: 1.0, c: [255, 233, 168] }
+  ];
+
+  function heatColor(t) {
+    t = Math.max(0, Math.min(1, t));
+    var a = HEAT_STOPS[0];
+    var b = HEAT_STOPS[HEAT_STOPS.length - 1];
+    for (var i = 0; i < HEAT_STOPS.length - 1; i++) {
+      if (t >= HEAT_STOPS[i].t && t <= HEAT_STOPS[i + 1].t) {
+        a = HEAT_STOPS[i];
+        b = HEAT_STOPS[i + 1];
+        break;
+      }
+    }
+    var span = (b.t - a.t) || 1;
+    var lt = (t - a.t) / span;
+    var r = (a.c[0] + (b.c[0] - a.c[0]) * lt) / 255;
+    var g = (a.c[1] + (b.c[1] - a.c[1]) * lt) / 255;
+    var bl = (a.c[2] + (b.c[2] - a.c[2]) * lt) / 255;
+    return new THREE.Color(r, g, bl);
+  }
+
+  function makeGlowTexture() {
+    var size = 128;
+    var canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    var ctx = canvas.getContext("2d");
+    var gradient = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    gradient.addColorStop(0, "rgba(255,255,255,1)");
+    gradient.addColorStop(0.35, "rgba(255,255,255,0.7)");
+    gradient.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    var texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+    return texture;
+  }
+
+  function makeLabelSprite(text, color) {
+    var canvas = document.createElement("canvas");
+    canvas.width = 128;
+    canvas.height = 64;
+    var ctx = canvas.getContext("2d");
+    ctx.font = "600 34px 'JetBrains Mono', monospace";
+    ctx.fillStyle = color;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    var texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+    var material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false });
+    var sprite = new THREE.Sprite(material);
+    sprite.scale.set(0.22, 0.11, 1);
+    return sprite;
+  }
+
+  // ----------------------------------------------------------
+  // Scene setup
+  // ----------------------------------------------------------
+
+  var mount = document.getElementById("mount");
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x05070a);
+
+  var camera = new THREE.PerspectiveCamera(72, mount.clientWidth / mount.clientHeight, 0.01, 100);
+  camera.position.set(0, 0.02, 0);
+
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(mount.clientWidth, mount.clientHeight);
+  mount.appendChild(renderer.domElement);
+
+  var ground = new THREE.Mesh(
+    new THREE.CircleGeometry(6, 48),
+    new THREE.MeshBasicMaterial({ color: 0x0a0c10, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -0.002;
+  scene.add(ground);
+
+  var domeShell = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2),
+    new THREE.MeshBasicMaterial({ color: 0x2a3346, wireframe: true, transparent: true, opacity: 0.08 })
+  );
+  scene.add(domeShell);
+
+  var ringMaterialDim = new THREE.LineBasicMaterial({ color: 0x6e2b22, transparent: true, opacity: 0.35 });
+  var ringMaterialHorizon = new THREE.LineBasicMaterial({ color: 0xc2452b, transparent: true, opacity: 0.55 });
+
+  [30, 60].forEach(function (altDeg) {
+    var pts = [];
+    for (var i = 0; i <= 64; i++) pts.push(azAltToVector((i / 64) * 360, altDeg, 1));
+    var geo = new THREE.BufferGeometry().setFromPoints(pts);
+    scene.add(new THREE.LineLoop(geo, ringMaterialDim));
+  });
+
+  (function () {
+    var pts = [];
+    for (var i = 0; i <= 64; i++) pts.push(azAltToVector((i / 64) * 360, 0.5, 1));
+    var geo = new THREE.BufferGeometry().setFromPoints(pts);
+    scene.add(new THREE.LineLoop(geo, ringMaterialHorizon));
+  })();
+
+  [{ az: 0, label: "N" }, { az: 90, label: "E" }, { az: 180, label: "S" }, { az: 270, label: "W" }]
+    .forEach(function (c) {
+      var sprite = makeLabelSprite(c.label, "#e2664a");
+      sprite.position.copy(azAltToVector(c.az, 4, 1.04));
+      scene.add(sprite);
+    });
+
+  (function () {
+    var starCount = 500;
+    var positions = new Float32Array(starCount * 3);
+    for (var i = 0; i < starCount; i++) {
+      var az = Math.random() * 360;
+      var alt = Math.random() * 90;
+      var v = azAltToVector(az, alt, 1.4 + Math.random() * 0.4);
+      positions[i * 3] = v.x;
+      positions[i * 3 + 1] = v.y;
+      positions[i * 3 + 2] = v.z;
+    }
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    var mat = new THREE.PointsMaterial({ color: 0x8a93a8, size: 0.01, transparent: true, opacity: 0.5, sizeAttenuation: true });
+    scene.add(new THREE.Points(geo, mat));
+  })();
+
+  var glowTexture = makeGlowTexture();
+
+  var heatGeometry = new THREE.BufferGeometry();
+  var heatMaterial = new THREE.PointsMaterial({
+    size: 0.09, map: glowTexture, transparent: true, depthWrite: false,
+    blending: THREE.AdditiveBlending, vertexColors: true, sizeAttenuation: true
+  });
+  var heatPoints = new THREE.Points(heatGeometry, heatMaterial);
+  scene.add(heatPoints);
+
+  var trailMaterial = new THREE.LineBasicMaterial({ color: 0xffce8a, transparent: true, opacity: 0.85 });
+  var trailGeometry = new THREE.BufferGeometry();
+  var trailLine = new THREE.Line(trailGeometry, trailMaterial);
+  scene.add(trailLine);
+
+  var lastPointMarker = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glowTexture, color: 0x9fe8ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  lastPointMarker.scale.set(0.14, 0.14, 1);
+  lastPointMarker.visible = false;
+  scene.add(lastPointMarker);
+
+  var mode = "heat";
+  function applyMode() {
+    heatPoints.visible = (mode === "heat" || mode === "both");
+    trailLine.visible = (mode === "trail" || mode === "both");
+    lastPointMarker.visible = trailLine.visible && lastPointMarker.hasPosition;
+  }
+
+  // ----------------------------------------------------------
+  // Data loading
+  // ----------------------------------------------------------
+
+  function renderData(data) {
+    var cells = data.cells || [];
+    var trail = data.trail || [];
+    var stats = data.stats || {};
+
+    document.getElementById("empty-state").classList.toggle(
+      "visible", cells.length === 0 && trail.length === 0
+    );
+
+    var maxCount = 1;
+    cells.forEach(function (c) { maxCount = Math.max(maxCount, c.count); });
+
+    var positions = new Float32Array(cells.length * 3);
+    var colors = new Float32Array(cells.length * 3);
+    cells.forEach(function (c, i) {
+      var v = azAltToVector(c.az, c.alt, 1);
+      positions[i * 3] = v.x;
+      positions[i * 3 + 1] = v.y;
+      positions[i * 3 + 2] = v.z;
+      var color = heatColor(c.count / maxCount);
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+    });
+    heatGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    heatGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    heatGeometry.attributes.position.needsUpdate = true;
+    heatGeometry.attributes.color.needsUpdate = true;
+
+    var trailPositions = new Float32Array(trail.length * 3);
+    trail.forEach(function (p, i) {
+      var v = azAltToVector(p.az, p.alt, 1.01);
+      trailPositions[i * 3] = v.x;
+      trailPositions[i * 3 + 1] = v.y;
+      trailPositions[i * 3 + 2] = v.z;
+    });
+    trailGeometry.setAttribute("position", new THREE.BufferAttribute(trailPositions, 3));
+    trailGeometry.attributes.position.needsUpdate = true;
+
+    if (trail.length > 0) {
+      var last = trail[trail.length - 1];
+      lastPointMarker.position.copy(azAltToVector(last.az, last.alt, 1.02));
+      lastPointMarker.hasPosition = true;
+    } else {
+      lastPointMarker.hasPosition = false;
+    }
+
+    document.getElementById("stats-line").textContent =
+      (stats.totalSessions || 0) + " sessions \u00b7 " + (stats.totalHours || 0) + "h logged";
+    document.getElementById("stats-hottest").textContent =
+      stats.hasHottest
+        ? "hottest region: " + stats.hottestAlt.toFixed(0) + "\u00b0 alt / " + stats.hottestAz.toFixed(0) + "\u00b0 az"
+        : "";
+
+    applyMode();
+  }
+
+  function loadRange(range) {
+    fetch("/api/sky-history?range=" + encodeURIComponent(range))
+      .then(function (r) { return r.json(); })
+      .then(renderData)
+      .catch(function () {
+        document.getElementById("stats-line").textContent = "history unavailable";
+      });
+  }
+
+  document.querySelectorAll("#range-buttons .sdh-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#range-buttons .sdh-btn").forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      loadRange(btn.getAttribute("data-range"));
+    });
+  });
+
+  document.querySelectorAll("#mode-buttons .sdh-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#mode-buttons .sdh-btn").forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      mode = btn.getAttribute("data-mode");
+      applyMode();
+    });
+  });
+
+  loadRange("30d");
+
+  // ----------------------------------------------------------
+  // Drag to look around
+  // ----------------------------------------------------------
+
+  var yaw = Math.PI * 0.15;
+  var pitch = 0.25;
+  var dragging = false;
+  var lastPointer = { x: 0, y: 0 };
+  var lastInteraction = 0;
+
+  renderer.domElement.addEventListener("pointerdown", function (e) {
+    dragging = true;
+    lastPointer = { x: e.clientX, y: e.clientY };
+    lastInteraction = performance.now();
+    mount.style.cursor = "grabbing";
+  });
+  window.addEventListener("pointermove", function (e) {
+    lastInteraction = performance.now();
+    if (!dragging) return;
+    var dx = e.clientX - lastPointer.x;
+    var dy = e.clientY - lastPointer.y;
+    lastPointer = { x: e.clientX, y: e.clientY };
+    yaw -= dx * 0.004;
+    pitch = Math.max(-0.15, Math.min(1.4, pitch + dy * 0.004));
+  });
+  window.addEventListener("pointerup", function () {
+    dragging = false;
+    mount.style.cursor = "grab";
+  });
+
+  var resizeObserver = new ResizeObserver(function () {
+    var w = mount.clientWidth, h = mount.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+  resizeObserver.observe(mount);
+
+  function animate() {
+    var idle = performance.now() - lastInteraction;
+    if (!dragging && idle > 1500) yaw += 0.0009;
+
+    var lookDir = new THREE.Vector3(
+      Math.sin(yaw) * Math.cos(pitch),
+      Math.sin(pitch),
+      -Math.cos(yaw) * Math.cos(pitch)
+    );
+    camera.lookAt(camera.position.clone().add(lookDir));
+
+    if (lastPointMarker.visible) {
+      var pulse = 0.14 + Math.sin(performance.now() * 0.004) * 0.025;
+      lastPointMarker.scale.set(pulse, pulse, 1);
+    }
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
+)SKYMAP_HTML";
+}
+
 
 std::string WebServer::buildHtml() const
 {

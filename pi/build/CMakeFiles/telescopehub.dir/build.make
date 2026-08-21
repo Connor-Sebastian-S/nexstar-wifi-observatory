@@ -184,10 +184,24 @@ CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nexstar/telescope-nexstar-wifi/pi/SkyCatalogue.cpp -o CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.s
 
+CMakeFiles/telescopehub.dir/SkyHistory.cpp.o: CMakeFiles/telescopehub.dir/flags.make
+CMakeFiles/telescopehub.dir/SkyHistory.cpp.o: /home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.cpp
+CMakeFiles/telescopehub.dir/SkyHistory.cpp.o: CMakeFiles/telescopehub.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/telescopehub.dir/SkyHistory.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/telescopehub.dir/SkyHistory.cpp.o -MF CMakeFiles/telescopehub.dir/SkyHistory.cpp.o.d -o CMakeFiles/telescopehub.dir/SkyHistory.cpp.o -c /home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.cpp
+
+CMakeFiles/telescopehub.dir/SkyHistory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/telescopehub.dir/SkyHistory.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.cpp > CMakeFiles/telescopehub.dir/SkyHistory.cpp.i
+
+CMakeFiles/telescopehub.dir/SkyHistory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/telescopehub.dir/SkyHistory.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nexstar/telescope-nexstar-wifi/pi/SkyHistory.cpp -o CMakeFiles/telescopehub.dir/SkyHistory.cpp.s
+
 CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o: CMakeFiles/telescopehub.dir/flags.make
 CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o: /home/nexstar/telescope-nexstar-wifi/pi/compat/Arduino.cpp
 CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o: CMakeFiles/telescopehub.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o -MF CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o.d -o CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o -c /home/nexstar/telescope-nexstar-wifi/pi/compat/Arduino.cpp
 
 CMakeFiles/telescopehub.dir/compat/Arduino.cpp.i: cmake_force
@@ -201,7 +215,7 @@ CMakeFiles/telescopehub.dir/compat/Arduino.cpp.s: cmake_force
 CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o: CMakeFiles/telescopehub.dir/flags.make
 CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o: /home/nexstar/telescope-nexstar-wifi/pi/compat/HardwareSerial.cpp
 CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o: CMakeFiles/telescopehub.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o -MF CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o.d -o CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o -c /home/nexstar/telescope-nexstar-wifi/pi/compat/HardwareSerial.cpp
 
 CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.i: cmake_force
@@ -215,7 +229,7 @@ CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.s: cmake_force
 CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o: CMakeFiles/telescopehub.dir/flags.make
 CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o: /home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp
 CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o: CMakeFiles/telescopehub.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o -MF CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o.d -o CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o -c /home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp
 
 CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.i: cmake_force
@@ -236,6 +250,7 @@ telescopehub_OBJECTS = \
 "CMakeFiles/telescopehub.dir/I2CBus.cpp.o" \
 "CMakeFiles/telescopehub.dir/EnvironmentSensor.cpp.o" \
 "CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o" \
+"CMakeFiles/telescopehub.dir/SkyHistory.cpp.o" \
 "CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o" \
 "CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o" \
 "CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o"
@@ -251,6 +266,7 @@ telescopehub: CMakeFiles/telescopehub.dir/GPS.cpp.o
 telescopehub: CMakeFiles/telescopehub.dir/I2CBus.cpp.o
 telescopehub: CMakeFiles/telescopehub.dir/EnvironmentSensor.cpp.o
 telescopehub: CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o
+telescopehub: CMakeFiles/telescopehub.dir/SkyHistory.cpp.o
 telescopehub: CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o
 telescopehub: CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o
 telescopehub: CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o
@@ -258,7 +274,7 @@ telescopehub: CMakeFiles/telescopehub.dir/build.make
 telescopehub: CMakeFiles/telescopehub.dir/compiler_depend.ts
 telescopehub: /usr/lib/arm-linux-gnueabihf/libsqlite3.so
 telescopehub: CMakeFiles/telescopehub.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable telescopehub"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nexstar/telescope-nexstar-wifi/pi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable telescopehub"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/telescopehub.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

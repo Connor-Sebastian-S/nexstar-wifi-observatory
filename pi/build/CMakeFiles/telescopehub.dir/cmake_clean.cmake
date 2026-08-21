@@ -10,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/telescopehub.dir/Recorder.cpp.o.d"
   "CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o"
   "CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o.d"
+  "CMakeFiles/telescopehub.dir/SkyHistory.cpp.o"
+  "CMakeFiles/telescopehub.dir/SkyHistory.cpp.o.d"
   "CMakeFiles/telescopehub.dir/StellariumServer.cpp.o"
   "CMakeFiles/telescopehub.dir/StellariumServer.cpp.o.d"
   "CMakeFiles/telescopehub.dir/WebServer.cpp.o"

@@ -10,6 +10,7 @@ telescopehub: \
   CMakeFiles/telescopehub.dir/I2CBus.cpp.o \
   CMakeFiles/telescopehub.dir/EnvironmentSensor.cpp.o \
   CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o \
+  CMakeFiles/telescopehub.dir/SkyHistory.cpp.o \
   CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o \
   CMakeFiles/telescopehub.dir/compat/HardwareSerial.cpp.o \
   CMakeFiles/telescopehub.dir/home/nexstar/telescope-nexstar-wifi/nexstar/NexStar.cpp.o \
@@ -59,6 +60,8 @@ CMakeFiles/telescopehub.dir/I2CBus.cpp.o:
 CMakeFiles/telescopehub.dir/EnvironmentSensor.cpp.o:
 
 CMakeFiles/telescopehub.dir/SkyCatalogue.cpp.o:
+
+CMakeFiles/telescopehub.dir/SkyHistory.cpp.o:
 
 CMakeFiles/telescopehub.dir/compat/Arduino.cpp.o:
 

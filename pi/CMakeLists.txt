@@ -27,6 +27,7 @@ add_executable(
     I2CBus.cpp
     EnvironmentSensor.cpp
     SkyCatalogue.cpp
+    SkyHistory.cpp
 
     compat/Arduino.cpp
     compat/HardwareSerial.cpp
